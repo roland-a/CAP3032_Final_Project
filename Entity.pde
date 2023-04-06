@@ -20,9 +20,9 @@ abstract class Entity
     this.y += sin(this.rot) * this.speed;
   }
 
-  public void rotateTo(float x, float y)
+  public void rotateTo(float targetX, float targetY)
   {
-    this.rot = atan2(this.x - x, this.y - y);
+    this.rot = atan2(targetY-y, targetX-x);
   }
   
   public void rotateTo(Entity e)
@@ -32,9 +32,9 @@ abstract class Entity
     this.rotateTo(e.x, e.y);
   }
 
-  public float distance(Entity entity)
+  public float distance(Entity e)
   {
-    return dist(x, y, entity.x, entity.y);
+    return dist(x, y, e.x, e.y);
   }
 
   <T extends Entity> T closest(ArrayList<T> list){
@@ -50,7 +50,7 @@ abstract class Entity
         continue;
       }
 
-      if (this.distance(closest) > closestDist)
+      if (this.distance(closest) < closestDist)
       {
         closest = s;
         closestDist = this.distance(closest);
@@ -64,8 +64,11 @@ abstract class Entity
   {
     pushMatrix();
 
+      translate(x, y);
       rotate(rot);
-      image(entityImage, x, y);
+      
+      imageMode(CENTER);
+      image(entityImage, 0, 0);
 
     popMatrix();
   }

@@ -3,25 +3,42 @@ class Zombie extends Entity
   int health;
   int damage;
   
+  boolean main;
+  
   Zombie(float x, float y, float rot)
   {
-    super(x, y, rot, 2.0, "zombie.png");
+    super(x, y, rot, 1.0, "zombie.png");
     
-    this.health = 3;
+    this.health = 50;
     damage = 10;
+    
+    main = false;
   }
   
-  public void updateIfMain(Game g)
+  public void update(Game g)
+  {
+    drawEntity();
+    
+    if (main)
+    {
+      mainUpdate(g);
+    }
+    else
+    {
+      hordeUpdate(g);
+    }
+  }
+  
+  public void mainUpdate(Game g)
   {
     drawEntity();
     
     this.rot = atan2(g.x, g.y);
     
     this.attack(g);
-    this.move();
   }
   
-  public void updateIfHoard(Game g)
+  public void hordeUpdate(Game g)
   {
     drawEntity();
     
@@ -42,5 +59,15 @@ class Zombie extends Entity
     if (dist < 1){
       closest.attacked(damage);
     }
+  }
+  
+  public void setMain()
+  {
+    main = true;
+  }
+  
+  public boolean isAlive()
+  {
+    return health > 0;
   }
 }
