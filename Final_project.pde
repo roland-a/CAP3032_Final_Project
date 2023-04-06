@@ -1,5 +1,3 @@
-//Test
-
 Game game;
 
 void setup()
@@ -11,7 +9,7 @@ void setup()
 
 void draw()
 {
-  
+  game.update();
 }
 
 void keyPressed(){

@@ -4,7 +4,7 @@ class Bullet extends Entity
   
   Bullet(float x, float y, float rot)
   {
-    super(x, y, rot, 1.0);
+    super(x, y, rot, 1.0, "bullet.png");
   }
   
   public void update()

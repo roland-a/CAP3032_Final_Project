@@ -1,19 +1,19 @@
 class Game
 {
-  PImage background;
-
   ArrayList<Soldier> soldiers = new ArrayList<>();
   ArrayList<Zombie> zombies = new ArrayList<>();
-  ArrayList<Bullet> bullet = new ArrayList<>();
+  ArrayList<Bullet> bullets = new ArrayList<>();
   
-  Zombie main = new Zombie(0,0,0);
+  Zombie main = new Zombie(width/2, height/2, 0);
   
   int x;
   int y;
+  
+  Background background;
 
   public Game()
   {
-    background = loadImage("background.jpg");
+    background = new Background();
   } 
 
   public void update()
@@ -21,7 +21,7 @@ class Game
     //Update the soldiers
     for (Soldier soldier : soldiers)
     {
-      soldier.update();
+      soldier.update(this);
     }
 
     //Update the zombies

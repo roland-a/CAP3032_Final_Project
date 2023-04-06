@@ -4,12 +4,14 @@ abstract class Entity
 
   PImage entityImage;
 
-  Entity(float x, float y, float rot, float speed)
+  Entity(float x, float y, float rot, float speed, String imageFileName)
   {
     this.x = x;
     this.y = y;
     this.rot = rot;
     this.speed = speed;
+    
+    entityImage = loadImage(imageFileName);
   }
 
   public void move()
