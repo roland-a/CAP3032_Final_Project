@@ -19,6 +19,30 @@ abstract class Entity
     this.x += cos(this.rot) * this.speed;
     this.y += sin(this.rot) * this.speed;
   }
+  
+  public void move(ArrayList<Zombie> zombies, ArrayList<Soldier> soldiers)
+  {
+    float newX = this.x + cos(this.rot) * this.speed;
+    float newY = this.y + sin(this.rot) * this.speed;
+    
+    for (Zombie z: zombies){
+      if (z == this) continue;
+      
+      if (dist(newX, newY, z.x, z.y) < 20){
+          return;
+      }
+    }
+    for (Soldier s: soldiers){
+      if (s == this) continue;
+      
+      if (dist(newX, newY, s.x, s.y) < 20){
+          return;
+      }
+    }
+    
+    this.x = newX;
+    this.y = newY;
+  }
 
   public void rotateTo(float targetX, float targetY)
   {    
