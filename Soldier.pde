@@ -1,60 +1,64 @@
 class Soldier extends Entity
 {
+  //Maximum magazine size
   int maxBullets;
+  //Current Bullet Count
   int bulletCount;
 
   //Reload Variables
   boolean reloading;
-  int reloadTime;
-  int reloadStartMinute;
-  int reloadStartSecond;
+  float reloadTime;
+  int reloadStart;
   
   //Shoot Variables
   boolean fired;
-  int fireRate;
-  int shotStartMinute;
-  int shotStartSecond;
-
+  int fireRatePerSecond;
+  int shotStart;
   int health;
 
-  public Soldier(float x, float y, int rot)
+  public Soldier(float x, float y, float rot)
   {
-    super(x, y, rot, 0, "soldier.png");
+    super(x, y, rot, 1, "soldier.png");
 
     health = 100; 
-    maxBullets = 20;
+    maxBullets = 5;
     bulletCount = maxBullets;
     
-    fireRate = 1;
-    reloadTime = 5;
+    fireRatePerSecond = 2;
+    reloadTime = 4.0;
   }
 
   public void update(Game g)
   {
     drawEntity();
+    
+    Zombie closest = this.closest(g.zombies);    
+    this.rotateTo(closest.x, closest.y);
 
     if (bulletCount <= 0)
     {
       reload();
     }
-    
-    shoot(g.zombies, g.bullets);
+    else
+    {
+      shoot(g.zombies, g.bullets);
+    }
   }
 
   public void shoot(ArrayList<Zombie> zombies, ArrayList<Bullet> bullets)
   {
-    if (fired) //Wait until the 
+    if (fired) //Wait the firerate delay
     {    
       //Calculate how much time has allapsed since the start of the shot
-      int timeAllapsedSinceShooting = minute() > shotStartMinute ? (60 - shotStartSecond) + second() : second() - shotStartSecond;
+      int timeAllapsedSinceShooting = millis() - shotStart;
       
-      if (timeAllapsedSinceShooting > fireRate)
+      if (timeAllapsedSinceShooting > (1000/(fireRatePerSecond)))
       {  
         //The soldier can fire again
         fired = false;
       }    
     }
-    else
+    else //Shoot a bullet
     {
       fired = true;
       
@@ -64,8 +68,7 @@ class Soldier extends Entity
       bullets.add(b);
       
       //Record when shot is fired
-      shotStartMinute = minute();
-      shotStartSecond = second();
+      shotStart = millis();
       
       bulletCount--;
     }
@@ -73,31 +76,29 @@ class Soldier extends Entity
 
   public void reload()
   {
-    //Reload Delay
-    if (reloading)
+    if (reloading) //If reload process has already started, wait the Reload Delay
     {
       //Calculate how much time has allapsed since the start of the reload
-      int timeAllapsedSinceReloadStart = minute() > reloadStartMinute ? (60 - reloadStartSecond) + second() : second() - reloadStartSecond; 
+      float timeAllapsedSinceReloadStart = (millis() - reloadStart) / 1000; 
       
       //Reload is finished when allapsed time is greater than the reload time
-      if (timeAllapsedSinceReloadStart > reloadTime)
+      if (timeAllapsedSinceReloadStart >= reloadTime)
       {
         bulletCount = maxBullets;
         
         reloading = false;
       }
     }
-    else
+    else //Begin the Reload
     {
       reloading = true;
       
       //Record when reload starts
-      reloadStartMinute = minute();
-      reloadStartSecond = second();
+      reloadStart = millis();
     }
   }
 
-  public void attacked(int damage)
+  public void damaged(int damage)
   {
     health -= damage;
   }
