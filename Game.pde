@@ -8,7 +8,7 @@ class Game
   ArrayList<Zombie> zombies;
   ArrayList<Bullet> bullets;
   
-  int mainZombieIndex;
+  Zombie mainZombie;
   
   int x;
   int y;
@@ -46,9 +46,20 @@ class Game
     {
       Zombie zombie = zombieIter.next();
       zombie.update(this);
+      
+      
       if (!zombie.isAlive()) 
       {
           zombieIter.remove();
+          
+          if (zombie == mainZombie){
+            if (this.zombies.size()==0){
+              this.gameover = true;  
+            }
+            else {
+              this.mainZombie = this.zombies.get((int)random(this.zombies.size()));
+            }
+          }
       }
     }
     
@@ -65,12 +76,8 @@ class Game
       }
     }
     
-    //If the main zombie is dead, choose a new main zombie
-    if (!zombies.get(mainZombieIndex).isAlive() && zombies.size() > 0)
-    {
-      chooseNewMainZombie();
-    }
-    else if (zombies.size() <= 0) //Gameover if there are no more zombies
+  
+    if (zombies.size() <= 0) //Gameover if there are no more zombies
     {
       gameover = true;
     }
@@ -89,8 +96,10 @@ class Game
     //TODO: choose initial soldiers and zombies
     soldiers.add(new Soldier(400, 400, 0.0));
     
-    zombies.add(new Zombie(width/2, height/2, 0.0));
-    mainZombieIndex = 0;
+    this.mainZombie = new Zombie(width/2, height/2, 0.0);
+    
+    zombies.add(mainZombie);
+    zombies.add(new Zombie(width/2, height/3, 0.0));
   }
 
   public void advanceLevel()
@@ -103,11 +112,6 @@ class Game
     }
   }
   
-  public void chooseNewMainZombie()
-  {
-    mainZombieIndex = (int) random(zombies.size());
-    zombies.get(mainZombieIndex).setMain();    
-  }
 
   public void drawBackground()
   {
