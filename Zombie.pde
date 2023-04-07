@@ -7,9 +7,9 @@ class Zombie extends Entity
   
   Zombie(float x, float y, float rot)
   {
-    super(x, y, rot, 1.0, "zombie.png");
+    super(x, y, rot, 2.0, "zombie.png");
     
-    this.health = 50;
+    this.health = 20;
     damage = 10;
     
     main = false;
@@ -33,9 +33,32 @@ class Zombie extends Entity
   {
     drawEntity();
     
-    this.rot = atan2(g.x, g.y);
+    this.rotateTo(mouseX, mouseY);
     
     this.attack(g);
+  }
+  
+  public void mainMove()
+  {
+    if (key == 'w')
+    {
+      this.y -= 5;
+    }
+    
+    if (key == 'a')
+    {
+      this.x -= 5;
+    }
+    
+    if (key == 's')
+    {
+      this.y += 5;
+    }
+    
+    if (key == 'd')
+    {
+      this.x += 5;
+    }
   }
   
   public void hordeUpdate(Game g)

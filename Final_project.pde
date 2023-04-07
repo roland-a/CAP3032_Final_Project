@@ -11,3 +11,8 @@ void draw()
 {
   game.update();
 }
+
+void keyPressed()
+{
+  game.playerKeyboard();
+}
