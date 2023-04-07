@@ -7,7 +7,7 @@ class Zombie extends Entity
   
   Zombie(float x, float y, float rot)
   {
-    super(x, y, rot, 2.0, "zombie.png");
+    super(x, y, rot, 3.0, "zombie.png");
     
     this.health = 20;
     damage = 10;
@@ -36,6 +36,8 @@ class Zombie extends Entity
     this.rotateTo(mouseX, mouseY);
     
     this.attack(g);
+    
+    move();
   }
   
   public void mainMove()
@@ -84,10 +86,15 @@ class Zombie extends Entity
     {
       float dist = this.distance(closest);
     
-      if (dist < 1){
+      if (dist < 5){
         closest.damaged(damage);
       }
     }
+  }
+  
+  public void damaged(float damage)
+  {
+    health -= damage;
   }
   
   public void setMain()

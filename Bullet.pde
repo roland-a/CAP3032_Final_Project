@@ -2,6 +2,8 @@ class Bullet extends Entity
 {
   boolean isHit = false;
   
+  float damage = 10;
+  
   Bullet(float x, float y, float rot)
   {
     super(x, y, rot, 3.0, "bullet.png");
@@ -20,9 +22,9 @@ class Bullet extends Entity
   {
     for (Zombie z: zombies)
     {
-      if (dist(this.x, this.y, z.x, z.y) < 2)
+      if (dist(this.x, this.y, z.x, z.y) < 5)
       {
-          z.health -= 1;
+          z.damaged(damage);
           this.isHit = true;
       }
     }
@@ -30,8 +32,8 @@ class Bullet extends Entity
   
   public boolean shouldBeRemoved()
   {
-    if (this.isHit) return true; 
+    boolean outOfBounds = x > width || x < 0 || y > height || y < 0;
     
-    return (x > width || x < 0 || y > height || y < 0);
+    return isHit || outOfBounds;
   }
 }
