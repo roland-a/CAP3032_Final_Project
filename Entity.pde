@@ -76,7 +76,7 @@ abstract class Entity
         continue;
       }
 
-      if (this.distance(closest) < closestDist)
+      if (this.distance(s) < closestDist)
       {
         closest = s;
         closestDist = this.distance(closest);
