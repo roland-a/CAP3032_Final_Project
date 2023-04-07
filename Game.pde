@@ -1,3 +1,5 @@
+import java.util.Iterator; 
+
 class Game
 {
   int gameLevel;
@@ -28,15 +30,28 @@ class Game
     drawBackground();
     
     //Update the soldiers
-    for (Soldier soldier : soldiers)
+    Iterator<Soldier> soldierIter = soldiers.iterator();
+    while (soldierIter.hasNext()) 
     {
+      Soldier soldier = soldierIter.next();
       soldier.update(this);
+      if (!soldier.isAlive()) 
+      {
+          zombies.add(new Zombie(soldier.x+20, soldier.y+20, 0));
+          soldierIter.remove();
+      }
     }
 
     //Update the zombies
-    for (Zombie zombie : zombies)
+    Iterator<Zombie> zombieIter = zombies.iterator();
+    while (zombieIter.hasNext()) 
     {
+      Zombie zombie = zombieIter.next();
       zombie.update(this);
+      if (!zombie.isAlive()) 
+      {
+          zombieIter.remove();
+      }
     }
     
     //Update the bullets
@@ -67,7 +82,7 @@ class Game
     bullets = new ArrayList<>();
     
     //TODO: choose initial soldiers and zombies
-    soldiers.add(new Soldier(100, 100, 0.0));
+    soldiers.add(new Soldier(400, 400, 0.0));
     
     zombies.add(new Zombie(width/2, height/2, 0.0));
     mainZombieIndex = 0;

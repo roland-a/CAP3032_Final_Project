@@ -21,7 +21,7 @@ abstract class Entity
   }
 
   public void rotateTo(float targetX, float targetY)
-  {
+  {    
     this.rot = atan2(targetY-y, targetX-x);
   }
   
@@ -34,6 +34,8 @@ abstract class Entity
 
   public float distance(Entity e)
   {
+    if (e == null) return 0;
+    
     return dist(x, y, e.x, e.y);
   }
 
