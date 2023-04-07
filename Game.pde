@@ -45,11 +45,11 @@ class Game
     {
       Zombie zombie = zombieIter.next();
       zombie.update(this);
-      
+
       if (!zombie.isAlive()) 
       {
           zombieIter.remove();
-          
+
           if (zombie == mainZombie)
           {
             chooseNewMainZombie();
@@ -87,12 +87,18 @@ class Game
     bullets = new ArrayList<>();
     
     //TODO: choose initial soldiers and zombies
-    soldiers.add(new Soldier(400, 400, 0.0));
+    for (int soldierY = 100; soldierY < height; soldierY += 500)
+    {
+      for (int soldierX = 100; soldierX < width; soldierX += 500)
+      {
+        soldiers.add(new Soldier(soldierX, soldierY, 0.0));  
+      }
+    }
     
     //Add Soldiers
-    for (int zombieX = 100; zombieX < width; zombieX += 100)
+    for (int zombieX = 100; zombieX < width; zombieX += 60)
     {
-      zombies.add(new Zombie(zombieX, height/3, 0.0));  
+      zombies.add(new Zombie(zombieX, height/2, 0.0));  
     }
     
     chooseNewMainZombie();

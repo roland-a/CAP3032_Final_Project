@@ -33,7 +33,7 @@ class Soldier extends Entity
     drawEntity();
     
     Zombie closest = this.closest(g.zombies);    
-    this.rotateTo(closest.x, closest.y);
+    this.rotateTo(closest);
 
     if (bulletCount <= 0)
     {
