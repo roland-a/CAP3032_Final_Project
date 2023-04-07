@@ -52,10 +52,17 @@ class Game
       }
     }
     
+    Iterator<Bullet> bulletIter = bullets.iterator();
     //Update the bullets
-    for (Bullet bullet : bullets)
+    while (bulletIter.hasNext())
     {
+      Bullet bullet = bulletIter.next();
       bullet.update(this);
+      
+      if (bullet.shouldBeRemoved())
+      {
+        bulletIter.remove();  
+      }
     }
     
     //If the main zombie is dead, choose a new main zombie
@@ -109,6 +116,8 @@ class Game
 
   void keyPressed()
   {
+    println("x");
+    
     game.x = 0;
     game.y = 0;
 

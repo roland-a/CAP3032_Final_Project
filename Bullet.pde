@@ -12,13 +12,15 @@ class Bullet extends Entity
     drawEntity();
     
     move();
+    
+    damageZombie(g.zombies);
   }
   
   public void damageZombie(ArrayList<Zombie> zombies)
   {
     for (Zombie z: zombies)
     {
-      if (dist(this.x, this.y, z.x, z.y) < 1)
+      if (dist(this.x, this.y, z.x, z.y) < 2)
       {
           z.health -= 1;
           this.isHit = true;
