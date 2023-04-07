@@ -13,14 +13,12 @@ class Game
   int x;
   int y;
   
-  PImage backgroundImage;
+  Background background = new Background();
   
   boolean gameover;
 
   public Game()
   {
-    //Temporary Background
-    backgroundImage = loadImage("background.jpg");
     
     reset();
   } 
@@ -106,8 +104,7 @@ class Game
 
   public void drawBackground()
   {
-    //TEMPORARY BACKGROUND
-    background(backgroundImage);
+    background.display();
   }
 
   void keyPressed()
