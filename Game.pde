@@ -19,7 +19,6 @@ class Game
 
   public Game()
   {
-    
     reset();
   } 
 
@@ -47,24 +46,19 @@ class Game
       Zombie zombie = zombieIter.next();
       zombie.update(this);
       
-      
       if (!zombie.isAlive()) 
       {
           zombieIter.remove();
           
-          if (zombie == mainZombie){
-            if (this.zombies.size()==0){
-              this.gameover = true;  
-            }
-            else {
-              this.mainZombie = this.zombies.get((int)random(this.zombies.size()));
-            }
+          if (zombie == mainZombie)
+          {
+            chooseNewMainZombie();
           }
       }
     }
     
-    Iterator<Bullet> bulletIter = bullets.iterator();
     //Update the bullets
+    Iterator<Bullet> bulletIter = bullets.iterator();
     while (bulletIter.hasNext())
     {
       Bullet bullet = bulletIter.next();
@@ -75,7 +69,6 @@ class Game
         bulletIter.remove();  
       }
     }
-    
   
     if (zombies.size() <= 0) //Gameover if there are no more zombies
     {
@@ -96,10 +89,13 @@ class Game
     //TODO: choose initial soldiers and zombies
     soldiers.add(new Soldier(400, 400, 0.0));
     
-    this.mainZombie = new Zombie(width/2, height/2, 0.0);
+    //Add Soldiers
+    for (int zombieX = 100; zombieX < width; zombieX += 100)
+    {
+      zombies.add(new Zombie(zombieX, height/3, 0.0));  
+    }
     
-    zombies.add(mainZombie);
-    zombies.add(new Zombie(width/2, height/3, 0.0));
+    chooseNewMainZombie();
   }
 
   public void advanceLevel()
@@ -112,34 +108,26 @@ class Game
     }
   }
   
-
+  public void chooseNewMainZombie()
+  {
+    if (this.zombies.size()<=0)
+    {
+      this.gameover = true;  
+    }
+    else 
+    {
+      this.mainZombie = this.zombies.get((int)random(this.zombies.size()));
+      this.mainZombie.setMain();
+    }
+  }
+  
   public void drawBackground()
   {
     background.display();
   }
-
-  void keyPressed()
+  
+  public void playerKeyboard()
   {
-    println("x");
-    
-    game.x = 0;
-    game.y = 0;
-
-    if (key == 'w')
-    {
-      game.y -= 1;
-    }
-    if (key == 's')
-    {
-      game.y += 1;
-    }
-    if (key == 'a')
-    {
-      game.x -= 1;
-    }
-    if (key == 'd')
-    {
-      game.x += 1;
-    }
+    mainZombie.mainMove();
   }
 }

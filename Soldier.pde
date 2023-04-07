@@ -21,11 +21,11 @@ class Soldier extends Entity
     super(x, y, rot, 1, "soldier.png");
 
     health = 100; 
-    maxBullets = 5;
+    maxBullets = 10;
     bulletCount = maxBullets;
     
     fireRatePerSecond = 2;
-    reloadTime = 4.0;
+    reloadTime = 2.0;
   }
 
   public void update(Game g)
