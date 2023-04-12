@@ -1,8 +1,11 @@
 abstract class Entity
 {
-  float x, y, rot, speed;
+  float x, y, rot, speed, sizeScale = 0.5;
 
   PImage entityImage;
+  
+  boolean tintImage = false;
+  color tintColor = color(255, 255.0, 255.0);
 
   Entity(float x, float y, float rot, float speed, String imageFileName)
   {
@@ -12,6 +15,7 @@ abstract class Entity
     this.speed = speed;
     
     entityImage = loadImage(imageFileName);
+    entityImage.resize((int) (entityImage.width * sizeScale), (int) (entityImage.height * sizeScale));
   }
 
   public void move()
@@ -94,8 +98,22 @@ abstract class Entity
       rotate(rot);
       
       imageMode(CENTER);
+      if (tintImage)
+      {
+        tint(tintColor);
+      }
+      else
+      {
+        tint(255.0, 255.0, 255.0);
+      }
       image(entityImage, 0, 0);
 
     popMatrix();
+  }
+  
+  public void tintEntity(float r, float g, float b)
+  {
+    tintImage = true;
+    tintColor = color(r, g, b);
   }
 }

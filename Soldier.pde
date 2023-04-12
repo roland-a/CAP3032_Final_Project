@@ -25,7 +25,7 @@ class Soldier extends Entity
     bulletCount = maxBullets;
     
     fireRatePerSecond = 2;
-    reloadTime = 2.0;
+    reloadTime = 4.0;
   }
 
   public void update(Game g)
