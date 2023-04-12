@@ -8,13 +8,11 @@ class Game
   ArrayList<Zombie> zombies;
   ArrayList<Bullet> bullets;
   
-  
-  float lastClickX = 0;
-  float lastClickY = 0;
-  int lastClickTime = -10000;
-  
   Zombie mainZombie;
-   
+  
+  int x;
+  int y;
+  
   Background background = new Background();
   
   boolean gameover;
@@ -23,22 +21,17 @@ class Game
   {
     reset();
   } 
-  
-  public void click()
-  {
-    lastClickX = mouseX;
-    lastClickY = mouseY;
-    lastClickTime = millis();
-  }
-  
-  public boolean listenToClick()
-  {
-    return millis() - lastClickTime < 500;
-  }
 
+  float lastUpdate;
   public void update()
   {    
     drawBackground();
+    
+    if ((millis() - lastUpdate) /1000 > 3)
+    {
+      soldiers.add(new Soldier(random(0, width), random(0, height), 0.0));
+      lastUpdate = millis();
+    }
     
     //Update the soldiers
     Iterator<Soldier> soldierIter = soldiers.iterator();
@@ -100,19 +93,16 @@ class Game
     zombies = new ArrayList<>();
     bullets = new ArrayList<>();
     
-    //TODO: choose initial soldiers and zombies
-    for (int soldierY = 100; soldierY < height; soldierY += 500)
+    //Add Initial Soldiers
+    for (int i = 0; i < 30; i++)
     {
-      for (int soldierX = 100; soldierX < width; soldierX += 500)
-      {
-        soldiers.add(new Soldier(soldierX, soldierY, 0.0));  
-      }
+      soldiers.add(new Soldier(random(0, width), random(0, height), 0.0));
     }
     
-    //Add Soldiers
-    for (int zombieX = 100; zombieX < width; zombieX += 60)
+    //Add initial Zombies
+    for (int i = 0; i<50; i++)
     {
-      zombies.add(new Zombie(zombieX, height/2, 0.0));  
+      zombies.add(new Zombie(random(0, width), random(0, height), 0.0));  
     }
     
     chooseNewMainZombie();
@@ -144,10 +134,5 @@ class Game
   public void drawBackground()
   {
     background.display();
-  }
-  
-  public void playerKeyboard()
-  {
-    mainZombie.mainMove();
   }
 }

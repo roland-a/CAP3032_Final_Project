@@ -9,7 +9,7 @@ class Zombie extends Entity
   {
     super(x, y, rot, 3.0, "zombie.png");
     
-    this.health = 20;
+    this.health = 50;
     damage = 10;
     
     main = false;
@@ -67,10 +67,9 @@ class Zombie extends Entity
   {
     drawEntity();
     
-    
-    if (g.listenToClick())
+    if (mousePressed && mouseButton == RIGHT)
     {
-      this.rotateTo(g.lastClickX, g.lastClickY);
+      this.rotateTo(mouseX, mouseY);
       this.move();
     }
     else {
@@ -107,6 +106,7 @@ class Zombie extends Entity
   
   public void setMain()
   {
+    tintEntity(255, 50, 50);
     main = true;
   }
   
