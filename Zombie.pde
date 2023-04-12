@@ -7,7 +7,7 @@ class Zombie extends Entity
   
   Zombie(float x, float y, float rot)
   {
-    super(x, y, rot, 3.0, "zombie.png");
+    super(x, y, rot, 4.0, "zombie.png");
     
     this.health = 50;
     damage = 10;
@@ -69,8 +69,11 @@ class Zombie extends Entity
     
     if (mousePressed && mouseButton == RIGHT)
     {
-      this.rotateTo(mouseX, mouseY);
-      this.move();
+      if (dist(x, y, mouseX, mouseY) < 200)
+      {
+        this.rotateTo(mouseX, mouseY);
+        this.move();
+      }
     }
     else {
       Soldier closest = this.closest(g.soldiers);

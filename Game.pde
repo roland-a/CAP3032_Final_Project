@@ -27,7 +27,7 @@ class Game
   {    
     drawBackground();
     
-    if ((millis() - lastUpdate) /1000 > 3)
+    if ((millis() - lastUpdate) /1000 > 2)
     {
       soldiers.add(new Soldier(random(0, width), random(0, height), 0.0));
       lastUpdate = millis();
