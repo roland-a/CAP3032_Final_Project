@@ -8,11 +8,13 @@ class Game
   ArrayList<Zombie> zombies;
   ArrayList<Bullet> bullets;
   
+  
+  float lastClickX = 0;
+  float lastClickY = 0;
+  int lastClickTime = -10000;
+  
   Zombie mainZombie;
-  
-  int x;
-  int y;
-  
+   
   Background background = new Background();
   
   boolean gameover;
@@ -21,6 +23,18 @@ class Game
   {
     reset();
   } 
+  
+  public void click()
+  {
+    lastClickX = mouseX;
+    lastClickY = mouseY;
+    lastClickTime = millis();
+  }
+  
+  public boolean listenToClick()
+  {
+    return millis() - lastClickTime < 500;
+  }
 
   public void update()
   {    

@@ -67,14 +67,22 @@ class Zombie extends Entity
   {
     drawEntity();
     
-    Soldier closest = this.closest(g.soldiers);
     
-    this.rotateTo(closest);
-    
-    this.attack(g);
-    if (closest != null)
+    if (g.listenToClick())
     {
+      this.rotateTo(g.lastClickX, g.lastClickY);
       this.move();
+    }
+    else {
+      Soldier closest = this.closest(g.soldiers);
+    
+      this.rotateTo(closest);
+    
+      this.attack(g);
+      if (closest != null)
+      {
+        this.move();
+      }
     }
   }
   
