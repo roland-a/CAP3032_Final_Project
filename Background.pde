@@ -8,10 +8,10 @@ class Background{
   final color lineColor = color(200,200,200);
   final color roadColor = color(100,100,100);
   final color edge1Color = color(80,80,80);
-  final color edge2Color = color(200,100,50);
+  final color edge2Color = color(100,100,50);
   
-  final color sand1Color = color(250,150,0);
-  final color sand2Color = color(200,150,0);
+  final color sand1Color = color(150,150,0);
+  final color sand2Color = color(100,150,0);
   
   private int y = 0;
   
