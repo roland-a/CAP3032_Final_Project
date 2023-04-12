@@ -69,16 +69,16 @@ abstract class Entity
 
   <T extends Entity> T closest(ArrayList<T> list){
     T closest = null;
-    float closestDist = -1;
+    float closestDist = 200;
 
     for (T s: list)
     {
-      if (closest == null)
-      {
-        closest = s;
-        closestDist = this.distance(closest);
-        continue;
-      }
+      //if (closest == null)
+      //{
+      //  closest = s;
+      //  closestDist = this.distance(closest);
+      //  continue;
+      //}
 
       if (this.distance(s) < closestDist)
       {
