@@ -102,7 +102,16 @@ class Game
     //Add initial Zombies
     for (int i = 0; i<50; i++)
     {
-      zombies.add(new Zombie(random(0, width), random(0, height), 0.0));  
+      Zombie newZ = new Zombie(random(0, width), random(0, height), 0.0);
+      
+      for (Zombie z: zombies){
+        if (dist(z.x, z.y, newZ.x, newZ.y) < 20){
+          i--;
+          continue;  
+        }
+      }
+      
+      zombies.add(newZ);  
     }
     
     chooseNewMainZombie();

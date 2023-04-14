@@ -37,7 +37,7 @@ class Zombie extends Entity
     
     this.attack(g);
     
-    move();
+    this.move(g.zombies, g.soldiers);
   }
   
   public void mainMove()
@@ -72,7 +72,7 @@ class Zombie extends Entity
       if (dist(x, y, mouseX, mouseY) < 200)
       {
         this.rotateTo(mouseX, mouseY);
-        this.move();
+        this.move(g.zombies, g.soldiers);
       }
     }
     else {
@@ -83,7 +83,7 @@ class Zombie extends Entity
       this.attack(g);
       if (closest != null)
       {
-        this.move();
+        this.move(g.zombies, g.soldiers);
       }
     }
   }
@@ -96,7 +96,7 @@ class Zombie extends Entity
     {
       float dist = this.distance(closest);
     
-      if (dist < 5){
+      if (dist < 32){
         closest.damaged(damage);
       }
     }
@@ -116,5 +116,42 @@ class Zombie extends Entity
   public boolean isAlive()
   {
     return health > 0;
+  }
+  
+  void move(ArrayList<Zombie> zombies, ArrayList<Soldier> soldiers){
+    move(this.rot, this.speed, zombies, soldiers);
+  }
+  
+  void move(float rot, float speed, ArrayList<Zombie> zombies, ArrayList<Soldier> soldiers)
+  {
+    float projX = this.x + cos(rot) * speed;
+    float projY = this.y + sin(rot) * speed;
+    
+    ArrayList<Zombie> toMove = new ArrayList();
+    for (Zombie z: zombies){
+      if (z == this) continue;
+      
+      float d1 = dist(this.x, this.y, z.x, z.y);
+      float d2 = dist(projX, projY, z.x, z.y);
+      
+
+      if (d1>d2 && d2 < 30){
+          toMove.add(z);
+      }
+    }
+    
+    for (Soldier s: soldiers){
+      float d1 = dist(this.x, this.y, s.x, s.y);
+      float d2 = dist(projX, projY, s.x, s.y);
+      
+      if (d1>d2 && d2 < 30){
+        return;
+      }
+    }
+    
+    for (Zombie z: toMove){
+      z.move(rot, speed/(toMove.size()+1), zombies, soldiers);
+    }
+    this.move(rot, speed/(toMove.size()+1));
   }
 }
