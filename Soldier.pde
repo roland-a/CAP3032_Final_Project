@@ -18,13 +18,13 @@ class Soldier extends Entity
 
   public Soldier(float x, float y, float rot)
   {
-    super(x, y, rot, 1, "soldier.png");
+    super(x, y, rot, 2, "soldier.png");
 
     health = 100; 
-    maxBullets = 10;
+    maxBullets = 15;
     bulletCount = maxBullets;
     
-    fireRatePerSecond = 2;
+    fireRatePerSecond = 5;
     reloadTime = 4.0;
   }
 
@@ -32,16 +32,28 @@ class Soldier extends Entity
   {
     drawEntity();
     
-    Zombie closest = this.closest(g.zombies);    
-    this.rotateTo(closest);
-
-    if (bulletCount <= 0)
+    Zombie closest = this.closest(g.zombies);  
+    if (closest != null)
     {
-      reload();
+      this.rotateTo(closest);
+  
+      if (bulletCount <= 0)
+      {
+        reload();
+      }
+      else
+      {
+        shoot(g.zombies, g.bullets);
+      }
+    }
+      
+    if (closeToEntity(g.zombies))
+    {
+      move(false);
     }
     else
     {
-      shoot(g.zombies, g.bullets);
+      move(true);
     }
   }
 

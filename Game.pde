@@ -41,7 +41,7 @@ class Game
       soldier.update(this);
       if (!soldier.isAlive()) 
       {
-          zombies.add(new Zombie(soldier.x+20, soldier.y+20, 0));
+          zombies.add(new Zombie(soldier.x, soldier.y, soldier.rot));
           soldierIter.remove();
       }
     }
