@@ -1,4 +1,4 @@
-class Zombie extends Entity
+class Zombie extends ShootingEntity
 {
   int health;
   int damage;
@@ -9,8 +9,14 @@ class Zombie extends Entity
   {
     super(x, y, rot, 4.0, "zombie.png");
     
-    this.health = 100;
-    damage = 10;
+    this.maxBullets = 10;
+    this.bulletCount = this.maxBullets;
+    
+    this.fireRatePerSecond = 2;
+    this.reloadTime = 4;
+    
+    this.health = 50;
+    this.damage = 10;
     
     main = false;
   }
@@ -31,45 +37,24 @@ class Zombie extends Entity
   
   public void mainUpdate(Game g)
   {
-    drawEntity();
-    
-    this.rotateTo(mouseX, mouseY);
+    if (dist(this.x,this.y,mouseX,mouseY)>5){
+      this.rotateTo(mouseX, mouseY);
+      this.move(g.zombies, g.soldiers);
+    }
     
     this.attack(g);
     
-    this.move(g.zombies, g.soldiers);
-  }
-  
-  public void mainMove()
-  {
-    if (key == 'w')
-    {
-      this.y -= 5;
-    }
-    
-    if (key == 'a')
-    {
-      this.x -= 5;
-    }
-    
-    if (key == 's')
-    {
-      this.y += 5;
-    }
-    
-    if (key == 'd')
-    {
-      this.x += 5;
+    if (mousePressed && mouseButton == LEFT){
+      println(this.bulletCount);
+      this.shoot(g);  
     }
   }
   
   public void hordeUpdate(Game g)
   {
-    drawEntity();
-    
     if (mousePressed && mouseButton == RIGHT)
     {
-      if (dist(x, y, mouseX, mouseY) < 200 && closeToEntity(g.zombies))
+      if (dist(x, y, mouseX, mouseY) < 500)
       {
         this.rotateTo(mouseX, mouseY);
         this.move(g.zombies, g.soldiers);
@@ -127,6 +112,9 @@ class Zombie extends Entity
     float projX = this.x + cos(rot) * speed;
     float projY = this.y + sin(rot) * speed;
     
+    if (projX < 20 && projX > width-20) return;
+    if (projY > height) return;
+    
     ArrayList<Zombie> toMove = new ArrayList();
     for (Zombie z: zombies){
       if (z == this) continue;
@@ -134,7 +122,6 @@ class Zombie extends Entity
       float d1 = dist(this.x, this.y, z.x, z.y);
       float d2 = dist(projX, projY, z.x, z.y);
       
-
       if (d1>d2 && d2 < 30){
           toMove.add(z);
       }
