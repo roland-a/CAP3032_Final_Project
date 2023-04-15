@@ -15,6 +15,8 @@ abstract class ShootingEntity extends Entity{
     super(x,y,rot,speed,imageFileName);  
   }
   
+  abstract boolean bulletCanHit(Entity t);
+  
   void shoot(Game g)
   {
     if (bulletCount <= 0){
@@ -26,7 +28,12 @@ abstract class ShootingEntity extends Entity{
     if (millis() < 1000/(fireRatePerSecond) + lastShotTime) return;
   
     //Make a bullet      
-    Bullet b = new Bullet(this.x + cos(rot)*10, this.y + sin(rot)*10, 0.0);        
+    Bullet b = new Bullet(this.x + cos(rot)*10, this.y + sin(rot)*10, 0.0){
+      boolean canHit(Entity t){
+        return bulletCanHit(t);
+      }
+    };        
+    
     b.rot = this.rot;
     g.bullets.add(b);
     

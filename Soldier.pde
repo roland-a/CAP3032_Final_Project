@@ -33,6 +33,10 @@ class Soldier extends ShootingEntity
       move(true);
     }
   }
+  
+  boolean bulletCanHit(Entity t){
+    return t instanceof Zombie;
+  }
 
   public void damaged(int damage)
   {

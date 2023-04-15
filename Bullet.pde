@@ -1,8 +1,8 @@
-class Bullet extends Entity
+abstract class Bullet extends Entity
 {
   boolean isHit = false;
   
-  float damage = 10;
+  int damage = 10;
   
   Bullet(float x, float y, float rot)
   {
@@ -15,20 +15,35 @@ class Bullet extends Entity
     
     move(true);
     
-    damageZombie(g.zombies);
+    damage(g);
   }
   
-  public void damageZombie(ArrayList<Zombie> zombies)
+  public void damage(Game g)
   {
-    for (Zombie z: zombies)
+    for (Zombie z: g.zombies)
     {
+      if (!canHit(z)) continue;
+      
       if (dist(this.x, this.y, z.x, z.y) < 10)
       {
           z.damaged(damage);
           this.isHit = true;
       }
     }
+    
+    for (Soldier s: g.soldiers)
+    {
+      if (!canHit(s)) continue;
+      
+      if (dist(this.x, this.y, s.x, s.y) < 10)
+      {
+          s.damaged(damage);
+          this.isHit = true;
+      }
+    }
   }
+  
+  abstract boolean canHit(Entity e);
   
   public boolean shouldBeRemoved()
   {

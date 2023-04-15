@@ -35,6 +35,10 @@ class Zombie extends ShootingEntity
     }
   }
   
+  boolean bulletCanHit(Entity t){
+    return t instanceof Soldier || t instanceof Zombie;
+  }
+  
   public void mainUpdate(Game g)
   {
     if (dist(this.x,this.y,mouseX,mouseY)>5){
