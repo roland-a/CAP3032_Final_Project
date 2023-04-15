@@ -9,7 +9,7 @@ class Zombie extends Entity
   {
     super(x, y, rot, 4.0, "zombie.png");
     
-    this.health = 50;
+    this.health = 100;
     damage = 10;
     
     main = false;
@@ -69,7 +69,7 @@ class Zombie extends Entity
     
     if (mousePressed && mouseButton == RIGHT)
     {
-      if (dist(x, y, mouseX, mouseY) < 200)
+      if (dist(x, y, mouseX, mouseY) < 200 && closeToEntity(g.zombies))
       {
         this.rotateTo(mouseX, mouseY);
         this.move(g.zombies, g.soldiers);

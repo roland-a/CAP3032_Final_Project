@@ -18,9 +18,23 @@ abstract class Entity
     entityImage.resize((int) (entityImage.width * sizeScale), (int) (entityImage.height * sizeScale));
   }
 
-  public void move()
+  public void move(boolean forwards)
   {
-    this.move(this.rot, this.speed);
+    if (outOfBounds())
+    {
+      forwards = !forwards;
+    }
+    else
+    {
+      if (forwards)
+      {
+        this.move(this.rot, this.speed);
+      }
+      else
+      {      
+        this.move(this.rot + 180, this.speed);
+      }
+    }
   }
   
   public void move(float rot, float speed)
@@ -44,7 +58,7 @@ abstract class Entity
 
   public float distance(Entity e)
   {
-    if (e == null) return 0;
+    if (e == null) return -1;
     
     return dist(x, y, e.x, e.y);
   }
@@ -97,5 +111,23 @@ abstract class Entity
   {
     tintImage = true;
     tintColor = color(r, g, b);
+  }
+  
+  public boolean outOfBounds()
+  {
+    return x > width || x < 0 || y > height || y < 0;
+  }
+  
+  public <T extends Entity> boolean closeToEntity(ArrayList<T> entities)
+  {
+    boolean close = false;
+    for (Entity e : entities)
+    {
+      if (this.distance(e) != -1 && this.distance(e) < 50)
+      {
+        close = true;
+      }
+    }
+    return close;
   }
 }
