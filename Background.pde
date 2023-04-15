@@ -13,22 +13,18 @@ class Background{
   final color sand1Color = color(150,150,0);
   final color sand2Color = color(100,150,0);
   
-  private int y = 0;
+  int y = 0;
   
-  color[][] buffer;
+  private int bufferY = 0;
+  private color[][] buffer;
   
   
   Background(){
     buffer = new color[pixelWidth][pixelHeight];
   }
   
-  
-  int currentHeight(){
-    return this.y;  
-  }
-  
-  void moveUp(){
-    this.y += 1;  
+  private void moveUp(){
+    this.bufferY += 1;  
     
     for (int x = 0; x < pixelWidth; x++)
     {
@@ -44,9 +40,37 @@ class Background{
       }
     }
   }
+    
+  private void moveDown(){
+    this.bufferY -= 1;  
+    
+    for (int x = 0; x < pixelWidth; x++)
+    {
+      for (int y = 0; y < pixelHeight; y++)
+      {
+        if (y == pixelHeight-1)
+        {
+          buffer[x][y] = 0;
+        }
+        else {
+          buffer[x][y] = buffer[x][y+1];
+        }
+      }
+    }
+  }
   
   private void display()
   {
+    while (bufferY != y){
+      if (y > bufferY){
+        moveUp();  
+      }
+      else {
+        moveDown();  
+      }
+    }
+    
+    
     for (int x = 0; x < pixelWidth; x++)
     {
       for (int y = 0; y < pixelHeight; y++)
