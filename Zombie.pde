@@ -16,7 +16,7 @@ class Zombie extends ShootingEntity
     this.reloadTime = 4;
     
     this.health = 50;
-    this.damage = 10;
+    this.damage = 1;
     
     main = false;
   }

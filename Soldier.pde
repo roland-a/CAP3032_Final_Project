@@ -4,7 +4,7 @@ class Soldier extends ShootingEntity
   {
     super(x, y, rot, 2, "soldier.png");
 
-    health = 100; 
+    health = 10; 
     maxBullets = 15;
     bulletCount = maxBullets;
     
