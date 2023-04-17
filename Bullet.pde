@@ -4,40 +4,44 @@ abstract class Bullet extends Entity
   
   int damage = 10;
   
-  Bullet(float x, float y, float rot)
+  Bullet(GamePos pos, Angle rot)
   {
-    super(x, y, rot, 10.0, "bullet.png");
+    super(.5, "bullet.png");
+    
+    this.speed = 10;
+    this.pos = pos;
+    this.angle = rot;
   }
   
   public void update(Game g)
   {
-    drawEntity();
+    this.drawEntity();
     
-    move(true);
+    this.move(true);
     
-    damage(g);
+    this.damage(g);
   }
   
   public void damage(Game g)
   {
     for (Zombie z: g.zombies)
     {
-      if (!canHit(z)) continue;
+      if (!this.canHit(z)) continue;
       
-      if (dist(this.x, this.y, z.x, z.y) < 10)
+      if (this.distance(z) < 10)
       {
-          z.damaged(damage);
+          z.damage(damage);
           this.isHit = true;
       }
     }
     
     for (Soldier s: g.soldiers)
     {
-      if (!canHit(s)) continue;
+      if (!this.canHit(s)) continue;
       
-      if (dist(this.x, this.y, s.x, s.y) < 10)
+      if (this.distance(s) < 10)
       {
-          s.damaged(damage);
+          s.damage(damage);
           this.isHit = true;
       }
     }
@@ -45,8 +49,8 @@ abstract class Bullet extends Entity
   
   abstract boolean canHit(Entity e);
   
-  public boolean shouldBeRemoved()
+  public boolean isAlive()
   {
-    return isHit || outOfBounds();
+    return !(this.isHit || this.outOfBounds());
   }
 }

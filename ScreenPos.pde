@@ -1,3 +1,16 @@
+ScreenPos getMousePos()
+{
+  return new ScreenPos(mouseX, mouseY);
+}
+
+ScreenPos randomScreenPos()
+{
+  return new ScreenPos(
+    (int)random(width),
+    (int)random(height)
+  );
+}
+
 class ScreenPos
 {
   final int x;
@@ -9,14 +22,9 @@ class ScreenPos
     this.y = y;
   }
   
-  static ScreenPos getMousePos()
+  GamePos toGamePos()
   {
-    return new ScrenPos(mouseX, mouseY);
-  }
-  
-  Position toGamePos()
-  {
-    return new ScreenPos(this.x, this.y);
+    return new GamePos(this.x, this.y);
   }
   
   

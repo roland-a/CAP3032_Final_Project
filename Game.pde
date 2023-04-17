@@ -29,8 +29,10 @@ class Game
     
     if ((millis() - lastUpdate) /1000 > 2)
     {
-      soldiers.add(new Soldier(random(0, width), random(0, height), 0.0));
-      lastUpdate = millis();
+      if (soldiers.size()<100){
+        soldiers.add(new Soldier(randomScreenPos().toGamePos()));
+        lastUpdate = millis();
+      }
     }
     
     //Update the soldiers
@@ -41,7 +43,7 @@ class Game
       soldier.update(this);
       if (!soldier.isAlive()) 
       {
-          zombies.add(new Zombie(soldier.x, soldier.y, soldier.rot));
+          zombies.add(new Zombie(soldier.pos, soldier.angle));
           soldierIter.remove();
       }
     }
@@ -71,7 +73,7 @@ class Game
       Bullet bullet = bulletIter.next();
       bullet.update(this);
       
-      if (bullet.shouldBeRemoved())
+      if (!bullet.isAlive())
       {
         bulletIter.remove();  
       }
@@ -96,16 +98,16 @@ class Game
     //Add Initial Soldiers
     for (int i = 0; i < 30; i++)
     {
-      soldiers.add(new Soldier(random(0, width), random(0, height), 0.0));
+      soldiers.add(new Soldier(randomScreenPos().toGamePos()));
     }
     
     //Add initial Zombies
     for (int i = 0; i<50; i++)
     {
-      Zombie newZ = new Zombie(random(0, width), random(0, height), 0.0);
+      Zombie newZ = new Zombie(randomScreenPos().toGamePos(), new Angle());
       
       for (Zombie z: zombies){
-        if (dist(z.x, z.y, newZ.x, newZ.y) < 20){
+        if (newZ.pos.distanceTo(z.pos) < 20){
           i--;
           continue;  
         }

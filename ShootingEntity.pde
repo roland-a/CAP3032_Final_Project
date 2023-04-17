@@ -11,33 +11,42 @@ abstract class ShootingEntity extends Entity{
   int health;
   float lastShotTime;
   
-  ShootingEntity(float x, float y, float rot, float speed, String imageFileName){
-    super(x,y,rot,speed,imageFileName);  
+  ShootingEntity(float scale, String imageFileName){
+    super(scale, imageFileName);  
   }
   
   abstract boolean bulletCanHit(Entity t);
   
   void shoot(Game g)
   {
-    if (bulletCount <= 0){
-      if (millis() < reloadTime*1000 + lastShotTime) return;
+    if (this.bulletCount <= 0){
+      if (millis() < this.reloadTime*1000 + this.lastShotTime) return;
       
-      bulletCount = maxBullets;
+      this.bulletCount = this.maxBullets;
     }
     
-    if (millis() < 1000/(fireRatePerSecond) + lastShotTime) return;
+    if (millis() < 1000/(this.fireRatePerSecond) + this.lastShotTime) return;
   
     //Make a bullet      
-    Bullet b = new Bullet(this.x + cos(rot)*10, this.y + sin(rot)*10, 0.0){
+    Bullet b = new Bullet(this.pos.move(this.angle, 5), this.angle){
       boolean canHit(Entity t){
         return bulletCanHit(t);
       }
     };        
     
-    b.rot = this.rot;
     g.bullets.add(b);
     
-    bulletCount -= 1;
-    lastShotTime = millis();
+    this.bulletCount -= 1;
+    this.lastShotTime = millis();
+  }
+  
+  public void damage(int damage)
+  {
+    this.health -= damage;
+  }
+  
+  public boolean isAlive()
+  {
+    return this.health > 0;
   }
 }

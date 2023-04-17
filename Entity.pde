@@ -1,22 +1,22 @@
 abstract class Entity
 {
-  float x, y, rot, speed, sizeScale = 0.5;
-
-  PImage entityImage;
+  final PImage entityImage;
   
   boolean tintImage = false;
   color tintColor = color(255, 255.0, 255.0);
+  
+  float speed;
+  
+  GamePos pos;
+  Angle angle;
 
-  Entity(float x, float y, float rot, float speed, String imageFileName)
+  Entity(float sizeScale, String imageFileName)
   {
-    this.x = x;
-    this.y = y;
-    this.rot = rot;
-    this.speed = speed;
-    
     entityImage = loadImage(imageFileName);
     entityImage.resize((int) (entityImage.width * sizeScale), (int) (entityImage.height * sizeScale));
   }
+  
+  abstract boolean isAlive();
 
   public void move(boolean forwards)
   {
@@ -28,39 +28,47 @@ abstract class Entity
     {
       if (forwards)
       {
-        this.move(this.rot, this.speed);
+        this.pos = this.pos.move(this.angle, this.speed);
       }
       else
       {      
-        this.move(this.rot + 180, this.speed);
+        this.pos = this.pos.move(this.angle.flip(), this.speed);
       }
     }
-  }
-  
-  public void move(float rot, float speed)
-  {
-    this.x += cos(rot) * speed;
-    this.y += sin(rot) * speed;
-  }
- 
-
-  public void rotateTo(float targetX, float targetY)
-  {    
-    this.rot = atan2(targetY-y, targetX-x);
   }
   
   public void rotateTo(Entity e)
   {
     if (e == null) return;
     
-    this.rotateTo(e.x, e.y);
+    this.angle = this.pos.pointTo(e.pos);
+  }
+  
+  public void rotateTo(GamePos p)
+  {
+    this.angle = this.pos.pointTo(p);
+  }
+  
+    public void rotateTo(ScreenPos p)
+  {
+    this.angle = this.pos.pointTo(p.toGamePos());
   }
 
   public float distance(Entity e)
   {
     if (e == null) return -1;
     
-    return dist(x, y, e.x, e.y);
+    return this.pos.distanceTo(e.pos);
+  }
+  
+  public float distance(GamePos pos)
+  {
+    return this.pos.distanceTo(pos);
+  }
+  
+  public float distance(ScreenPos pos)
+  {
+    return this.pos.distanceTo(pos.toGamePos());
   }
 
   <T extends Entity> T closest(ArrayList<T> list){
@@ -69,13 +77,6 @@ abstract class Entity
 
     for (T s: list)
     {
-      //if (closest == null)
-      //{
-      //  closest = s;
-      //  closestDist = this.distance(closest);
-      //  continue;
-      //}
-
       if (this.distance(s) < closestDist)
       {
         closest = s;
@@ -90,8 +91,8 @@ abstract class Entity
   {
     pushMatrix();
 
-      translate(x, y);
-      rotate(rot);
+      translate(pos.x, pos.y);
+      rotate(angle.angle);
       
       imageMode(CENTER);
       if (tintImage)
@@ -115,7 +116,7 @@ abstract class Entity
   
   public boolean outOfBounds()
   {
-    return x > width || x < 0 || y > height || y < 0;
+    return this.pos.x > width || this.pos.x < 0 || this.pos.y > height || this.pos.y < 0;
   }
   
   public <T extends Entity> boolean closeToEntity(ArrayList<T> entities)

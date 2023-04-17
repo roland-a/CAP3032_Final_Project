@@ -1,13 +1,16 @@
 class Zombie extends ShootingEntity
 {
-  int health;
   int damage;
   
   boolean main;
   
-  Zombie(float x, float y, float rot)
+  Zombie(GamePos pos, Angle angle)
   {
-    super(x, y, rot, 4.0, "zombie.png");
+    super(.5, "zombie.png");
+    
+    this.pos = pos;
+    this.angle=angle;
+    this.speed = 4;
     
     this.maxBullets = 10;
     this.bulletCount = this.maxBullets;
@@ -18,7 +21,7 @@ class Zombie extends ShootingEntity
     this.health = 50;
     this.damage = 1;
     
-    main = false;
+    this.main = false;
   }
   
   public void update(Game g)
@@ -27,11 +30,11 @@ class Zombie extends ShootingEntity
     
     if (main)
     {
-      mainUpdate(g);
+      this.mainUpdate(g);
     }
     else
     {
-      hordeUpdate(g);
+      this.hordeUpdate(g);
     }
   }
   
@@ -41,90 +44,72 @@ class Zombie extends ShootingEntity
   
   public void mainUpdate(Game g)
   {
-    if (dist(this.x,this.y,mouseX,mouseY)>5){
-      this.rotateTo(mouseX, mouseY);
-      this.move(g.zombies, g.soldiers);
-    }
+    ScreenPos mousePos = getMousePos();
     
-    this.attack(g);
+    if (this.distance(mousePos)>5){
+      this.rotateTo(mousePos);
+      this.move(this.angle, this.speed, g.zombies, g.soldiers);
+    }
     
     if (mousePressed && mouseButton == LEFT){
       println(this.bulletCount);
       this.shoot(g);  
     }
+    
+    Soldier closest = closest(g.soldiers);
+    if (closest != null){
+      this.attack(closest);  
+    }
+    
   }
+  
   
   public void hordeUpdate(Game g)
   {
-    if (mousePressed && mouseButton == RIGHT)
+    if (mousePressed && mouseButton == RIGHT && this.distance(getMousePos()) < 500)
     {
-      if (dist(x, y, mouseX, mouseY) < 500)
-      {
-        this.rotateTo(mouseX, mouseY);
-        this.move(g.zombies, g.soldiers);
-      }
+      this.rotateTo(getMousePos());
+      this.move(this.angle, this.speed, g.zombies, g.soldiers);
     }
     else {
       Soldier closest = this.closest(g.soldiers);
+      if (closest == null) return;
     
       this.rotateTo(closest);
-    
-      this.attack(g);
-      if (closest != null)
-      {
-        this.move(g.zombies, g.soldiers);
-      }
+      this.move(this.angle, this.speed, g.zombies, g.soldiers);
+      
+      this.attack(closest);
     }
   }
   
-  public void attack(Game g)
+  public void attack(Soldier closest)
   {
-    Soldier closest = this.closest(g.soldiers);
-    
-    if (closest != null)
-    {
-      float dist = this.distance(closest);
-    
-      if (dist < 32){
-        closest.damaged(damage);
-      }
-    }
-  }
+    float dist = this.distance(closest);
   
-  public void damaged(float damage)
-  {
-    health -= damage;
+    if (dist < 30){
+      closest.damage(damage);
+    }
   }
   
   public void setMain()
   {
     tintEntity(255, 50, 50);
-    main = true;
+    this.main = true;
   }
   
-  public boolean isAlive()
+  void move(Angle angle, float speed, ArrayList<Zombie> zombies, ArrayList<Soldier> soldiers)
   {
-    return health > 0;
-  }
-  
-  void move(ArrayList<Zombie> zombies, ArrayList<Soldier> soldiers){
-    move(this.rot, this.speed, zombies, soldiers);
-  }
-  
-  void move(float rot, float speed, ArrayList<Zombie> zombies, ArrayList<Soldier> soldiers)
-  {
-    float projX = this.x + cos(rot) * speed;
-    float projY = this.y + sin(rot) * speed;
+    GamePos proj = this.pos.move(angle, speed);
     
-    if (projX < 20 && projX > width-20) return;
-    if (projY > height) return;
+    if (proj.x < 20 && proj.x > width-20) return;
+    if (proj.y > height) return;
     
     ArrayList<Zombie> toMove = new ArrayList();
     for (Zombie z: zombies){
       if (z == this) continue;
       
-      float d1 = dist(this.x, this.y, z.x, z.y);
-      float d2 = dist(projX, projY, z.x, z.y);
+      float d1 = this.pos.distanceTo(z.pos);
+      float d2 = proj.distanceTo(z.pos);
       
       if (d1>d2 && d2 < 30){
           toMove.add(z);
@@ -132,8 +117,8 @@ class Zombie extends ShootingEntity
     }
     
     for (Soldier s: soldiers){
-      float d1 = dist(this.x, this.y, s.x, s.y);
-      float d2 = dist(projX, projY, s.x, s.y);
+      float d1 = this.pos.distanceTo(s.pos);
+      float d2 = proj.distanceTo(s.pos);
       
       if (d1>d2 && d2 < 30){
         return;
@@ -141,8 +126,8 @@ class Zombie extends ShootingEntity
     }
     
     for (Zombie z: toMove){
-      z.move(rot, speed/(toMove.size()+1), zombies, soldiers);
+      z.move(angle, speed/(toMove.size()+1), zombies, soldiers);
     }
-    this.move(rot, speed/(toMove.size()+1));
+    this.pos = this.pos.move(angle, speed/(toMove.size()+1));
   }
 }
