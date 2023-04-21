@@ -5,6 +5,7 @@ LevelMenu levelMenu;
 Game game;
 
 boolean inMainMenu = true;
+boolean gameStarted = false;
 
 int currentY = 0;
 int targetY = 0;
@@ -17,47 +18,64 @@ void setup()
   background = new Background();
   menu = new Menu(0, 0);
   levelMenu = new LevelMenu(0, -height);
-  //game = new Game();
+  game = new Game();
 }
 
 void draw()
 {
-  if (currentY < targetY)
+  if (!gameStarted)
   {
-    moveScreenDown();
+    if (currentY < targetY)
+    {
+      moveScreenDown();
+    }
+    else if (currentY > targetY)
+    {
+      moveScreenUp();
+    }
+    
+    background.display();  
+    menu.display();
+    levelMenu.display();
   }
-  else if (currentY > targetY)
+  else
   {
-    moveScreenUp();
+    game.update();
   }
-  
-  background.display();  
-  menu.display();
-  levelMenu.display();
-  //game.update();
 }
 
 void mouseClicked()
 {
-  //Main Menu Buttons
-  if (inMainMenu && menu.startButton.intersects(mouseX, mouseY))
+  if (!gameStarted)
   {
-    inMainMenu = false; 
+    //Main Menu Buttons
+    if (inMainMenu && menu.startButton.intersects(mouseX, mouseY))
+    {
+      inMainMenu = false; 
+      
+      targetY = height;
+    }  
+    if (inMainMenu && menu.quitButton.intersects(mouseX, mouseY))
+    {
+      exit();
+    }
     
-    targetY = height;
-  }  
-  if (inMainMenu && menu.quitButton.intersects(mouseX, mouseY))
-  {
-    exit();
+    //Level Menu Buttons
+    if (!inMainMenu && levelMenu.backButton.intersects(mouseX, mouseY))
+    {
+      inMainMenu = true; 
+      
+      targetY = 0;
+    }  
+    if (!inMainMenu && levelMenu.level1.intersects(mouseX, mouseY))
+    {
+      //TODO: starts level1 game mode
+    }
+    if (!inMainMenu && levelMenu.level2.intersects(mouseX, mouseY))
+    {
+      //TODO: starts level2 game mode
+    }
   }
-  
-  //Level Menu Buttons
-  if (!inMainMenu && levelMenu.backButton.intersects(mouseX, mouseY))
-  {
-    inMainMenu = true; 
-    
-    targetY = 0;
-  }  
 }
 
 void moveScreenUp()
