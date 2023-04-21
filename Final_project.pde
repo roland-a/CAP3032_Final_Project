@@ -29,48 +29,6 @@ void setup()
   mainMenu = new Menu(0, 0);
   levelMenu = new LevelMenu(0, -height);
   gameoverMenu = new GameOver(0, height);
-  
-  
-  
-  level1 = new Game(background){
-    int maxZombies = 0;
-    
-    {
-      this.secsBetweenUpdates = 1;  
-      
-      while (this.zombies.size()<1)
-      {
-        this.zombies.add(randomZombie());
-      }
-      while (this.soldiers.size()<1)
-      {
-        this.soldiers.add(new Soldier(randomScreenPos(), 5));
-      }
-    }
-     
-    @Override
-    void doPeriodicUpdate()
-    {
-      if (this.maxZombies<this.zombies.size())
-      {
-        this.maxZombies = this.zombies.size();
-      }
-      
-      int soldierCount = this.maxZombies/2;
-      if (soldierCount == 0)
-      {
-          soldierCount = 1;
-      }
-      
-      int soldierHealth = 5 + this.zombies.size()*2;
-      
-      while (this.soldiers.size()<soldierCount)
-      {
-        this.soldiers.add(new Soldier(randomScreenPos(), soldierHealth));
-      }
-    }
-};
-  
 }
 
 void draw()
@@ -215,6 +173,11 @@ Game makeLevel1()
         );
       }
     }
+    
+    @Override()
+    int getScore(){
+      return this.maxZombies;
+    }
   };
 }
 
@@ -240,14 +203,20 @@ Game makeLevel2()
     @Override
     void doPeriodicUpdate()
     {
-      int soldierCount = this.started.secsPassed()/2;
+      int soldierCount = this.started.secsPassed()/5;
+      int health = 10 +this.started.secsPassed();
 
       while (this.soldiers.size()<soldierCount)
       {
         this.soldiers.add(
-          new Soldier(randomScreenPos(), 20)
+          new Soldier(randomScreenPos(), health)
         );
       }
+    }
+    
+    @Override()
+    int getScore(){
+      return this.started.secsPassed();
     }
   };
 }

@@ -25,10 +25,15 @@ abstract class Game
   //Runs this method periodically
   abstract void doPeriodicUpdate();
   
+  //gets the score
+  abstract int getScore();
+  
   //Runs an update every loop
   void update()
   {    
     background.display();
+    
+    text("Score: " + this.getScore(),  100, height-50);
 
     soldiers.update(this);
     zombies.update(this);
