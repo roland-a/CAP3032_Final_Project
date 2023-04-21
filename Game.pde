@@ -40,7 +40,7 @@ abstract class Game
     }
     
     if (this.lastUpdated.hasSecsPassed(secsBetweenUpdates)){
-      doUpdate();
+      doPeriodicUpdate();
       this.lastUpdated = now();
     }
   }

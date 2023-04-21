@@ -5,6 +5,9 @@ LevelMenu levelMenu;
 
 Game level1;
 
+
+Game currGame;
+
 boolean inMainMenu = true;
 
 int currentY = 0;
@@ -71,19 +74,23 @@ void setup()
 
 void draw()
 {
-  if (currentY < targetY)
-  {
-    moveScreenDown();
-  }
-  else if (currentY > targetY)
-  {
-    moveScreenUp();
-  }
-  
   background.display();  
-  menu.display();
-  levelMenu.display();
-  //game.update();
+  
+  if (currGame != null){
+    currGame.update();
+  }
+  else {
+    if (currentY < targetY)
+    {
+      moveScreenDown();
+    }
+    else if (currentY > targetY)
+    {
+      moveScreenUp();
+    }
+    menu.display();
+    levelMenu.display();
+  }
 }
 
 void mouseClicked()
@@ -106,6 +113,11 @@ void mouseClicked()
     inMainMenu = true; 
     
     targetY = 0;
+  }  
+  //Level Menu Buttons
+  if (!inMainMenu && levelMenu.level1.intersects(mouseX, mouseY))
+  {
+    currGame = level1;
   }  
 }
 
