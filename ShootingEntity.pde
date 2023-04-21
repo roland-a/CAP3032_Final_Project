@@ -48,6 +48,8 @@ abstract class ShootingEntity extends Entity{
     
     //moves the bullet so that it wont hit the entity shooting it
     b.pos = b.pos.move(this.angle, b.radius+this.radius+1);
+   
+    
     
     g.bullets.add(b);
     

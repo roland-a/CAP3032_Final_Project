@@ -1,6 +1,8 @@
 abstract class Bullet extends Entity
 {
   
+  SoundFile gunShot;
+  
   //whether the bullet has hit an entity it can interact with
   boolean hasHit = false;
   
@@ -13,6 +15,8 @@ abstract class Bullet extends Entity
     
     this.pos = pos;
     this.angle = rot;
+    
+    new SoundFile(Final_project.this, "gunshot.mp3").play();
   }
   
   @Override
