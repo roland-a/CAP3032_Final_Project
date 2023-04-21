@@ -49,7 +49,9 @@ abstract class ShootingEntity extends Entity{
     //moves the bullet so that it wont hit the entity shooting it
     b.pos = b.pos.move(this.angle, b.radius+this.radius+1);
    
-    
+    if (g.bullets.size()<16){
+       new SoundFile(Final_project.this, "gunshot.mp3").play();
+    }
     
     g.bullets.add(b);
     

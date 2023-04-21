@@ -1,5 +1,6 @@
 class GameOver
 {
+  PImage gameoverImage;
   
   int originX, originY;
   
@@ -7,6 +8,8 @@ class GameOver
   
   public GameOver(int newX, int newY)
   {
+    gameoverImage = loadImage("gameover.png");
+    
     originX = newX;
     originY = newY;
     
@@ -21,6 +24,10 @@ class GameOver
     rectMode(CENTER);
     fill(0, 95);
     rect(originX + width/2, originY + height/2, width-200, height-200, 30);
+    
+    //Draw title image
+    imageMode(CENTER);
+    image(gameoverImage, originX+width/2, originY + height/2 -50);
     
     //Draw buttons
     retryButton.display();

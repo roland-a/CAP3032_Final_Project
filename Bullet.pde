@@ -15,8 +15,6 @@ abstract class Bullet extends Entity
     
     this.pos = pos;
     this.angle = rot;
-    
-    new SoundFile(Final_project.this, "gunshot.mp3").play();
   }
   
   @Override
