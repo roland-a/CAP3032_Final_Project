@@ -37,7 +37,7 @@ class Background{
     buffer = new color[pixelWidth][pixelHeight];
   }
   
-  //moves the background up or down
+  //shifts the background up or down
   void move(int y){
     if (y > 0){
       for (int i = 0; i < y; i++){
@@ -71,7 +71,7 @@ class Background{
     }
   }
     
-  //shifts the buffer downward
+  //shifts the background downward
   private void moveDown(){
     this.y--;
     
@@ -90,6 +90,7 @@ class Background{
     }
   }
   
+  //Displays the background
   private void display()
   {
     for (int x = 0; x < pixelWidth; x++)

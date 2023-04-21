@@ -1,7 +1,3 @@
-Angle randomAngle(){
-  return new Angle(random(360));
-}
-
 class Angle
 {
   //The angle in degrees
