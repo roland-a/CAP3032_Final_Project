@@ -4,6 +4,8 @@ class GameOver
   
   int originX, originY;
   
+  int score;
+  
   Button retryButton, quitButton;
   
   public GameOver(int newX, int newY)
@@ -28,6 +30,9 @@ class GameOver
     //Draw title image
     imageMode(CENTER);
     image(gameoverImage, originX+width/2, originY + height/2 -50);
+    
+    fill(255,255,255);
+    text("Final Score: " + this.score,  originX+width/2, originY+height-200);
     
     //Draw buttons
     retryButton.display();

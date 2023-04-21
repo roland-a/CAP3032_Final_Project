@@ -18,8 +18,6 @@ int targetY = 0;
 
 void setup()
 {
-  println(this.getClass());
-  
   size(1440, 810);
   frameRate(60);
   
@@ -44,16 +42,17 @@ void draw()
   else {
     if (currGame != null && currGame.isGameOver())
     {
-      currGame = null;
-      
       currentY = -height;
       targetY = -height;
       
       levelMenu.setOrigin(0, -height * 2);
       mainMenu.setOrigin(0, -height);
       gameoverMenu.setOrigin(0, 0);
+      gameoverMenu.score = currGame.getScore();
       
       menuState = 2;
+      
+      currGame = null;
     }    
     
     if (currentY < targetY)
