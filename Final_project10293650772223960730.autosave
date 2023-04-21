@@ -18,20 +18,20 @@ void setup()
 {
   size(1440, 810);
   frameRate(60);
-  
+
   background = new Background();
-  
+
   //Menus
   mainMenu = new Menu(0, 0);
   levelMenu = new LevelMenu(0, -height);
   gameoverMenu = new GameOver(0, height);
-  
+
   level1 = new Game(background){
     int maxZombies = 0;
-    
+
     {
-      this.secsBetweenUpdates = 1;  
-      
+      this.secsBetweenUpdates = 1;
+
       while (this.zombies.size()<1)
       {
         this.zombies.add(randomZombie());
@@ -41,7 +41,7 @@ void setup()
         this.soldiers.add(new Soldier(randomScreenPos(), 5));
       }
     }
-     
+
     @Override
     void doPeriodicUpdate()
     {
@@ -49,28 +49,28 @@ void setup()
       {
         this.maxZombies = this.zombies.size();
       }
-      
+
       int soldierCount = this.maxZombies/2;
       if (soldierCount == 0)
       {
           soldierCount = 1;
       }
-      
+
       int soldierHealth = 5 + this.zombies.size()*2;
-      
+
       while (this.soldiers.size()<soldierCount)
       {
         this.soldiers.add(new Soldier(randomScreenPos(), soldierHealth));
       }
     }
 };
-  
+
 }
 
 void draw()
 {
-  background.display();  
-  
+  background.display();
+
   if (currGame != null && !currGame.isGameOver()){
     currGame.update();
   }
@@ -78,17 +78,17 @@ void draw()
     if (currGame != null && currGame.isGameOver())
     {
       currGame = null;
-      
+
       currentY = -height;
       targetY = -height;
-      
+
       levelMenu.setOrigin(0, -height * 2);
       mainMenu.setOrigin(0, -height);
       gameoverMenu.setOrigin(0, 0);
-      
+
       menuState = 2;
-    }    
-    
+    }
+
     if (currentY < targetY)
     {
       moveScreenDown();
@@ -97,7 +97,7 @@ void draw()
     {
       moveScreenUp();
     }
-    
+
     mainMenu.display();
     levelMenu.display();
     gameoverMenu.display();
@@ -112,21 +112,21 @@ void mouseClicked()
     if (menuState == 0 && mainMenu.startButton.intersects(mouseX, mouseY))
     {
       menuState = 1;
-      
+
       targetY = height;
-    }  
+    }
     if (menuState == 0 && mainMenu.quitButton.intersects(mouseX, mouseY))
     {
       exit();
     }
-    
+
     //Level Menu Buttons
     if (menuState == 1 && levelMenu.backButton.intersects(mouseX, mouseY))
     {
       menuState = 0;
-      
+
       targetY = 0;
-    }  
+    }
     //Level Menu Buttons
     if (menuState == 1 && levelMenu.level1.intersects(mouseX, mouseY))
     {
@@ -136,16 +136,16 @@ void mouseClicked()
     {
       currGame = makeLevel2();
     }
-    
+
     //Game Over Buttons
     if (menuState == 2 && gameoverMenu.retryButton.intersects(mouseX, mouseY))
     {
       currGame = makeLevel1();
-    }  
+    }
     if (menuState == 2 && gameoverMenu.quitButton.intersects(mouseX, mouseY))
     {
       menuState = 0;
-      
+
       targetY = 0;
     }
   }
@@ -153,7 +153,7 @@ void mouseClicked()
 
 void moveScreenUp()
 {
-  int moveAmount = 30;
+  int moveAmount = 10;
   currentY -= moveAmount;
   mainMenu.moveUp(moveAmount);
   levelMenu.moveUp(moveAmount);
@@ -163,13 +163,14 @@ void moveScreenUp()
 
 void moveScreenDown()
 {
-  int moveAmount = 30;
+  int moveAmount = 10;
   currentY += moveAmount;
   mainMenu.moveDown(moveAmount);
   levelMenu.moveDown(moveAmount);
-  gameoverMenu.moveDown(moveAmount);
+  gameoverMenu.moveUp(moveAmount);
   background.move(2);
 }
+
 
 Game makeLevel1()
 {
@@ -217,13 +218,13 @@ Game makeLevel2()
   return new Game(background){
     //constructor
     {
-      this.secsBetweenUpdates = 2;
+      this.secsBetweenUpdates = 5;
 
-      while (this.zombies.size()<10)
+      while (this.zombies.size()<20)
       {
         this.zombies.add(randomZombie());
       }
-      while (this.soldiers.size()<10)
+      while (this.soldiers.size()<20)
       {
         this.soldiers.add(
           new Soldier(randomScreenPos(), 20)
@@ -234,12 +235,13 @@ Game makeLevel2()
     @Override
     void doPeriodicUpdate()
     {
-      int soldierCount = this.started.secsPassed()/2;
-
+      int soldierCount = 20+this.started.secsPassed()/3;
+      int soldierHealth = 10+this.started.secsPassed()/3;
+      
       while (this.soldiers.size()<soldierCount)
       {
         this.soldiers.add(
-          new Soldier(randomScreenPos(), 20)
+          new Soldier(randomScreenPos(), soldierHealth)
         );
       }
     }

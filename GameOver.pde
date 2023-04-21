@@ -1,19 +1,16 @@
-class Menu
+class GameOver
 {
-  PImage titleImage;
   
   int originX, originY;
   
-  Button startButton, quitButton;
+  Button retryButton, quitButton;
   
-  public Menu(int newX, int newY)
+  public GameOver(int newX, int newY)
   {
-    titleImage = loadImage("title.png");
-    
     originX = newX;
     originY = newY;
     
-    startButton = new Button("START", originX + width/2 - 300, originY + height - 200, color(0, 150, 0));
+    retryButton = new Button("RETRY", originX + width/2 - 300, originY + height - 200, color(0));
     quitButton = new Button("QUIT", originX + width/2 + 300, originY + height - 200, color(150, 0, 0));
   }
   
@@ -25,12 +22,8 @@ class Menu
     fill(0, 95);
     rect(originX + width/2, originY + height/2, width-200, height-200, 30);
     
-    //Draw title image
-    imageMode(CENTER);
-    image(titleImage, originX+width/2, originY + height/2 - 100);
-    
     //Draw buttons
-    startButton.display();
+    retryButton.display();
     quitButton.display();
   }
   
@@ -58,7 +51,7 @@ class Menu
   
   public void updateButtons()
   {
-    startButton.updateLoc(width/2 - 300, originY + height-200);
+    retryButton.updateLoc(width/2 - 300, originY + height-200);
     quitButton.updateLoc(width/2 + 300, originY + height-200);
   }
 }

@@ -31,14 +31,27 @@ class LevelMenu
   public void moveDown(int moveAmount)
   {
     originY += moveAmount;
-    level1.updateLoc(originX + width/2 - 300, originY + height/2 - 100);
-    level2.updateLoc(originX + width/2 + 300, originY + height/2 - 100);
-    backButton.updateLoc(originX + width - 300, originY + height-200);
+    
+    updateButtons();
   }
   
   public void moveUp(int moveAmount)
   {
     originY -= moveAmount;
+    
+    updateButtons();
+  }
+  
+  public void setOrigin(int newX, int newY)
+  {
+    originX = newX;
+    originY = newY;
+    
+    updateButtons();
+  }
+  
+  public void updateButtons()
+  {
     level1.updateLoc(originX + width/2 - 300, originY + height/2 - 100);
     level2.updateLoc(originX + width/2 + 300, originY + height/2 - 100);
     backButton.updateLoc(originX + width - 300, originY + height-200);
