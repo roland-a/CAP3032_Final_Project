@@ -1,3 +1,5 @@
+import java.util.Iterator; 
+
 class EntityList<T extends Entity> implements Iterable<T>{
   ArrayList<T> inner = new ArrayList<T>();
    

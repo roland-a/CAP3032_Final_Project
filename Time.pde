@@ -12,6 +12,10 @@ class TimeStamp{
   
   //Returns true if an amount of time has passed since this time and the current time
   boolean hasSecsPassed(float secs){
-    return (millis()-this.time) > secs*1000;
+    return secsPassed() > secs;
+  }
+  
+  int secsPassed(){
+    return (millis()-this.time)/1000;
   }
 }

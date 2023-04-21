@@ -1,5 +1,3 @@
-import java.util.Iterator; 
-
 abstract class Game
 {
   Background background;
@@ -12,8 +10,7 @@ abstract class Game
   TimeStamp started;
   TimeStamp lastUpdated;
   
-  int secsBetweenUpdates;
-  
+  float secsBetweenUpdates;
   
   Game(Background background)
   {

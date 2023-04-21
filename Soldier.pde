@@ -2,7 +2,7 @@ class Soldier extends ShootingEntity
 {
   int damage;
 
-  public Soldier(GamePos pos)
+  public Soldier(GamePos pos, int health)
   {
     super(.5, "soldier.png");
 
@@ -12,7 +12,7 @@ class Soldier extends ShootingEntity
     this.radius = 10;
     this.speed = 3;
 
-    this.health = 5;
+    this.health = health;
     this.maxBullets = 10;
     this.bulletCount = maxBullets;
 
@@ -43,8 +43,6 @@ class Soldier extends ShootingEntity
 
 
   void reactTo(Zombie closest, Game g) {
-    if (this.distanceTo(closest) > 400) return;
-
     this.rotateTo(closest);
     this.tryShoot(g);
 

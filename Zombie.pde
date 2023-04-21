@@ -2,7 +2,7 @@ Zombie randomZombie() {
   return new Zombie(
     randomScreenPos(),
     new Angle()
-    );
+  );
 }
 
 class Zombie extends ShootingEntity
@@ -91,19 +91,22 @@ class Zombie extends ShootingEntity
   public void hordeUpdate(Game g)
   {
     Soldier closest = g.soldiers.closest(this.pos);
-
-    //moves to mouse position if the right mouse button is clicked
+    
+    GamePos targetPos;
+    
     if (mousePressed && mouseButton == RIGHT && this.distance(getMousePos()) < 200)
     {
-      this.rotateTo(getMousePos());
-      this.move(this.angle, this.speed, g);
-    } else
+      targetPos = getMousePos();
+    } 
+    else
     {
       if (closest == null) return;
-      this.rotateTo(closest);
-      
-      this.move(this.angle, this.speed, g);
+      targetPos = closest.pos;
     }
+    
+    targetPos = targetPos.move(randomAngle(), 5);
+    this.rotateTo(targetPos);
+    this.move(this.angle, this.speed, g);
     
     if (closest == null) return;
     this.tryAttack(closest);
@@ -129,6 +132,7 @@ class Zombie extends ShootingEntity
   {
     tintEntity(255, 50, 50);
     this.main = true;
+    this.speed = speed+2;
   }
 
   //moves the current zombie

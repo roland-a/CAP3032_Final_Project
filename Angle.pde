@@ -1,3 +1,7 @@
+Angle randomAngle(){
+  return new Angle(random(360));
+}
+
 class Angle
 {
   //The angle in degrees
@@ -12,6 +16,8 @@ class Angle
   {
     this(0); 
   }
+  
+  
   
   //gets the cosine of the angle
   float cos()
