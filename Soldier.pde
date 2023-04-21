@@ -1,5 +1,7 @@
 class Soldier extends ShootingEntity
 {
+  int damage;
+  
   public Soldier(GamePos pos)
   {
     super(.5, "soldier.png");
@@ -7,28 +9,45 @@ class Soldier extends ShootingEntity
     this.pos = pos;
     this.angle = new Angle();
     
-    this.speed = 2;
+    this.radius = 10;
+    this.speed = 3;
     
-    this.health = 10; 
-    this.maxBullets = 15;
+    this.health = 5; 
+    this.maxBullets = 10;
     this.bulletCount = maxBullets;
     
-    this.fireRatePerSecond = 5;
+    this.shootTime = .5;
     this.reloadTime = 4;
+    
+    this.damage = 10;
   }
+ 
 
   public void update(Game g)
   {
     drawEntity();
     
-    Zombie closest = this.closest(g.zombies);  
-    if (closest == null) return;
+    Zombie closest = g.zombies.closest(this.pos);  
+    
+    if (closest != null)
+    {
+      reactTo(closest, g);  
+    }
+    
+    if (!this.isAlive())
+    {
+      Zombie z = new Zombie(this.pos, this.angle);
+      g.zombies.add(z);
+    }
+  }
+  
+  void reactTo(Zombie closest, Game g){  
+    if (this.distance(closest) > 400) return;
     
     this.rotateTo(closest);
-
     this.shoot(g);
     
-    if (this.distance(closest) < 50){
+    if (this.distance(closest) < closest.radius+20){
       this.move(false);
     }
     else {
@@ -36,7 +55,12 @@ class Soldier extends ShootingEntity
     }
   }
   
-  boolean bulletCanHit(Entity t){
-    return t instanceof Zombie;
+  boolean bulletInteract(Entity t){
+    if (t instanceof Zombie)
+    {
+      ((Zombie)t).damage(this.damage);
+      return true;
+    }
+    return false;
   }
 }

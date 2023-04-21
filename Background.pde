@@ -1,7 +1,7 @@
 class Background{
-  final int lineSize = 20;
-  final int roadSize = 400;
-  final int center = 500;
+  final int lineSize = 10;
+  final int roadSize = 200;
+  final int center = 600;
   final int edge1Size = roadSize+50;
   final int edge2Size = edge1Size+50;
   
@@ -99,7 +99,7 @@ class Background{
   private color getColor(int x, int y){
     if (
       inLayer(x, lineSize) && 
-      inBlob(x,y,20,.6)
+      inBlob(x,y,20,.5)
     ){
       return lineColor;
     }

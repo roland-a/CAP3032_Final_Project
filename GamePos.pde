@@ -30,6 +30,10 @@ class GamePos
     );
   }
   
+  boolean isOutOfBounds(){
+    return this.x > width || this.x < 0 || this.y > height || this.y < 0;
+  }
+  
   ScreenPos toScreenPos(){
     return new ScreenPos((int)this.x, (int)this.y);  
   }

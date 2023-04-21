@@ -1,9 +1,14 @@
+import processing.sound.*;
+
 Game game;
+SoundFile GUN_SHOT_SOUND;
+
 
 void setup()
 {
   size(1440, 810);
   
+  GUN_SHOT_SOUND = new SoundFile(this, "gunshot.mp3");
   game = new Game(){
     
     int maxZombies = 0;

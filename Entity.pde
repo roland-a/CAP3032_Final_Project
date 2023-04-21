@@ -5,10 +5,12 @@ abstract class Entity
   boolean tintImage = false;
   color tintColor = color(255, 255.0, 255.0);
   
+  int radius;
   float speed;
   
   GamePos pos;
   Angle angle;
+
 
   Entity(float sizeScale, String imageFileName)
   {
@@ -16,24 +18,23 @@ abstract class Entity
     entityImage.resize((int) (entityImage.width * sizeScale), (int) (entityImage.height * sizeScale));
   }
   
+  abstract void update(Game g);
+  
   abstract boolean isAlive();
 
   public void move(boolean forwards)
   {
-    if (outOfBounds())
+    GamePos newPos;
+    if (forwards)
     {
-      forwards = !forwards;
+       newPos = pos.move(this.angle, this.speed);
     }
     else
-    {
-      if (forwards)
-      {
-        this.pos = this.pos.move(this.angle, this.speed);
-      }
-      else
-      {      
-        this.pos = this.pos.move(this.angle.flip(), this.speed);
-      }
+    {      
+      newPos = this.pos.move(this.angle.flip(), this.speed);
+    }
+    if (!newPos.isOutOfBounds()){
+      this.pos = newPos;
     }
   }
   
@@ -112,11 +113,6 @@ abstract class Entity
   {
     tintImage = true;
     tintColor = color(r, g, b);
-  }
-  
-  public boolean outOfBounds()
-  {
-    return this.pos.x > width || this.pos.x < 0 || this.pos.y > height || this.pos.y < 0;
   }
   
   public <T extends Entity> boolean closeToEntity(ArrayList<T> entities)

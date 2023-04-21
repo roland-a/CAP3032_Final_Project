@@ -2,13 +2,13 @@ abstract class Bullet extends Entity
 {
   boolean isHit = false;
   
-  int damage = 10;
-  
   Bullet(GamePos pos, Angle rot)
   {
     super(.5, "bullet.png");
     
     this.speed = 10;
+    this.radius = 5;
+    
     this.pos = pos;
     this.angle = rot;
   }
@@ -17,7 +17,7 @@ abstract class Bullet extends Entity
   {
     this.drawEntity();
     
-    this.move(true);
+    this.pos = this.pos.move(this.angle, this.speed);
     
     this.damage(g);
   }
@@ -26,31 +26,27 @@ abstract class Bullet extends Entity
   {
     for (Zombie z: g.zombies)
     {
-      if (!this.canHit(z)) continue;
-      
-      if (this.distance(z) < 10)
+      if (this.distance(z) < this.radius+z.radius)
       {
-          z.damage(damage);
-          this.isHit = true;
+          this.isHit = interact(z);
+          if (this.isHit) return;
       }
     }
     
     for (Soldier s: g.soldiers)
     {
-      if (!this.canHit(s)) continue;
-      
-      if (this.distance(s) < 10)
+      if (this.distance(s) < this.radius+s.radius)
       {
-          s.damage(damage);
-          this.isHit = true;
+          this.isHit = interact(s);
+          if (this.isHit) return;
       }
     }
   }
   
-  abstract boolean canHit(Entity e);
+  abstract boolean interact(Entity e);
   
   public boolean isAlive()
   {
-    return !(this.isHit || this.outOfBounds());
+    return !this.isHit && !this.pos.isOutOfBounds();
   }
 }
