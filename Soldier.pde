@@ -47,7 +47,7 @@ class Soldier extends ShootingEntity
   //how to behave to the closest zombie
   void reactTo(Zombie closest, Game g) {
     this.rotateTo(closest);
-    this.tryShoot(g);
+    this.tryShoot(g, g.bullets.size()<4);
 
     if (this.distanceTo(closest) < closest.radius+20) {
       this.move(false);

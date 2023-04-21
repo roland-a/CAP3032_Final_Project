@@ -88,7 +88,7 @@ class Zombie extends ShootingEntity
     //shoot if left mouse is clicked
     if (mousePressed && mouseButton == LEFT)
     {
-      this.tryShoot(g);
+      this.tryShoot(g, true);
     }
 
     //try to attack the closest soldier

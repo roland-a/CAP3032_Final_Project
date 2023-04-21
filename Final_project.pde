@@ -7,9 +7,9 @@ Menu mainMenu;
 LevelMenu levelMenu;
 GameOver gameoverMenu;
 
-Game level1;
-
 Game currGame;
+
+SoundFile music;
 
 int menuState = 0;
 
@@ -29,6 +29,9 @@ void setup()
   mainMenu = new Menu(0, 0);
   levelMenu = new LevelMenu(0, -height);
   gameoverMenu = new GameOver(0, height);
+  
+  music = new SoundFile(this, "music.mp3");
+  music.loop();
 }
 
 void draw()

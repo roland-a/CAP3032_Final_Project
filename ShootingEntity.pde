@@ -28,7 +28,7 @@ abstract class ShootingEntity extends Entity{
   
   //The entity will attempt to shoot
   //Nothing will happen if it has shot recently, or if it is currently reloading
-  void tryShoot(Game g)
+  void tryShoot(Game g, boolean makeSound)
   {
     if (this.bulletCount <= 0){
       if (!lastShotTime.hasSecsPassed(reloadTime)) return;
@@ -48,12 +48,11 @@ abstract class ShootingEntity extends Entity{
     
     //moves the bullet so that it wont hit the entity shooting it
     b.pos = b.pos.move(this.angle, b.radius+this.radius+1);
-   
-    if (g.bullets.size()<16){
-       new SoundFile(Final_project.this, "gunshot.mp3").play();
-    }
     
     g.bullets.add(b);
+    if (makeSound){
+       new SoundFile(Final_project.this, "gunshot.mp3").play();
+    }
     
     this.bulletCount -= 1;
     this.lastShotTime = now();
