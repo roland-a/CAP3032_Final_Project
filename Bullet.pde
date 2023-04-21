@@ -16,6 +16,8 @@ abstract class Bullet extends Entity
   }
   
   @Override
+  //Moves the bullet forward
+  //If interacted with a zombie or soldier, then its no longer "alive"
   public void update(Game g)
   {
     this.drawEntity();
@@ -44,7 +46,6 @@ abstract class Bullet extends Entity
   //returns whether the bullet can interact with an entity
   //interacts with it if returns true
   abstract boolean interact(Entity e);
-  
   
   //The bullet is alive if it has not hit an entity, and it is not out of bounds
   @Override

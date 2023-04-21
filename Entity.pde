@@ -10,18 +10,24 @@ abstract class Entity
   
   GamePos pos;
   Angle angle;
-
+  
+  TimeStamp spawnTime;
 
   Entity(float sizeScale, String imageFileName)
   {
     entityImage = loadImage(imageFileName);
     entityImage.resize((int) (entityImage.width * sizeScale), (int) (entityImage.height * sizeScale));
+    this.spawnTime = now();
   }
   
+  //Updates the entity
   abstract void update(Game g);
   
+  //Returns whether the entity is alive
   abstract boolean isAlive();
 
+  //Moves the entity
+  //Does nothing if the entity will go out of bound
   public void move(boolean forwards)
   {
     GamePos newPos;
@@ -88,6 +94,7 @@ abstract class Entity
     popMatrix();
   }
   
+  //Tints the entity's image
   public void tintEntity(float r, float g, float b)
   {
     tintImage = true;

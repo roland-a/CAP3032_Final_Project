@@ -15,6 +15,7 @@ class TimeStamp{
     return secsPassed() > secs;
   }
   
+  //Returns how many seconds passed
   int secsPassed(){
     return (millis()-this.time)/1000;
   }

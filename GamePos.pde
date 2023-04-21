@@ -1,3 +1,4 @@
+//Gets a random mouse position
 GamePos randomScreenPos()
 {
   return new GamePos(
@@ -6,6 +7,7 @@ GamePos randomScreenPos()
   );
 }
 
+//Gets the position of the mouse
 GamePos getMousePos()
 {
   return new GamePos(mouseX, mouseY);

@@ -22,6 +22,9 @@ class Soldier extends ShootingEntity
     this.damage = 10;
   }
 
+  //Updates the soldier
+  //Tries to shoot the closest zombie
+  //If dead, then spawns a zombie in its place
   @Override
   public void update(Game g)
   {
@@ -41,7 +44,7 @@ class Soldier extends ShootingEntity
     }
   }
 
-
+  //how to behave to the closest zombie
   void reactTo(Zombie closest, Game g) {
     this.rotateTo(closest);
     this.tryShoot(g);

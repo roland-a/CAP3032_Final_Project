@@ -10,6 +10,8 @@ abstract class Game
   TimeStamp started;
   TimeStamp lastUpdated;
   
+  int ticksPassed;
+  
   float secsBetweenUpdates;
   
   Game(Background background)
@@ -20,9 +22,10 @@ abstract class Game
     this.background = background;
   }
 
+  //Runs this method periodically
   abstract void doPeriodicUpdate();
   
-  //runs an update every loop
+  //Runs an update every loop
   void update()
   {    
     background.display();
@@ -40,8 +43,11 @@ abstract class Game
       doPeriodicUpdate();
       this.lastUpdated = now();
     }
+    
+    this.ticksPassed++;
   }
 
+  //Returns whther the player lost
   public boolean isGameOver(){
     return zombies.size()==0;
   }

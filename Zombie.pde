@@ -8,9 +8,10 @@ Zombie randomZombie() {
 class Zombie extends ShootingEntity
 {
   int damage;
-  boolean main;
-
+  float damageTime = .2;
   TimeStamp lastDamageTime = now();
+  
+  boolean main;
 
   Zombie(GamePos pos, Angle angle)
   {
@@ -20,7 +21,7 @@ class Zombie extends ShootingEntity
     this.radius = 10;
     this.speed = 4;
     this.maxBullets = 10;
-    this.reloadTime = 4;
+    this.reloadTime = 0;
     this.shootTime = .5;
 
     this.pos = pos;
@@ -48,6 +49,7 @@ class Zombie extends ShootingEntity
     return true;
   }
 
+  //Updates the zombie depending if it is a main or hoard
   @Override
     public void update(Game g)
   {
@@ -63,8 +65,18 @@ class Zombie extends ShootingEntity
   }
 
   //update the zombie if it is a main zombie
+  //flash if it has recently spawned
+  //moves the zombie to the mouse position
+  //attack the nearest soldier if its close enough
   private void mainUpdate(Game g)
   {
+    if (!this.spawnTime.hasSecsPassed(1)){
+      this.tintImage = g.ticksPassed/3 % 2 == 0;
+    }
+    else {
+      this.tintImage = true;
+    }
+    
     //move to mouse position
     //wont move if it is too close to mouse posoition
     if (this.distance(getMousePos())>5)
@@ -87,28 +99,17 @@ class Zombie extends ShootingEntity
     }
   }
 
-
+  //updates the hoard
+  //attacks the nearest soldier if its close enough
   public void hordeUpdate(Game g)
   {
     Soldier closest = g.soldiers.closest(this.pos);
     
-    GamePos targetPos;
+    if (closest == null) return;
     
-    if (mousePressed && mouseButton == RIGHT && this.distance(getMousePos()) < 200)
-    {
-      targetPos = getMousePos();
-    } 
-    else
-    {
-      if (closest == null) return;
-      targetPos = closest.pos;
-    }
-    
-    targetPos = targetPos.move(randomAngle(), 5);
-    this.rotateTo(targetPos);
+    this.rotateTo(closest);
     this.move(this.angle, this.speed, g);
     
-    if (closest == null) return;
     this.tryAttack(closest);
   }
 
@@ -133,10 +134,12 @@ class Zombie extends ShootingEntity
     tintEntity(255, 50, 50);
     this.main = true;
     this.speed = speed+2;
+    
+    this.spawnTime = now();
   }
 
-  //moves the current zombie
-  //will also push other zombies
+  //Moves the current zombie
+  //will also push other zombies in the way
   private void move(Angle angle, float speed, Game g)
   {
     //The projected new position
