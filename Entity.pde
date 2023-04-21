@@ -31,63 +31,42 @@ abstract class Entity
     }
     else
     {      
-      newPos = this.pos.move(this.angle.flip(), this.speed);
+      newPos = this.pos.move(this.angle.rotate(180), this.speed);
     }
     if (!newPos.isOutOfBounds()){
       this.pos = newPos;
     }
   }
   
-  public void rotateTo(Entity e)
+  //Rotates this entity to face a target entity
+  public void rotateTo(Entity target)
   {
-    if (e == null) return;
+    if (target == null) return;
     
-    this.angle = this.pos.pointTo(e.pos);
+    this.angle = this.pos.pointTo(target.pos);
   }
   
-  public void rotateTo(GamePos p)
+  //Rotates this entity to face a target position
+  public void rotateTo(GamePos target)
   {
-    this.angle = this.pos.pointTo(p);
-  }
-  
-    public void rotateTo(ScreenPos p)
-  {
-    this.angle = this.pos.pointTo(p.toGamePos());
+    this.angle = this.pos.pointTo(target);
   }
 
-  public float distance(Entity e)
+  //Returns the distance between this entity and a target entity
+  public float distanceTo(Entity target)
   {
-    if (e == null) return -1;
+    if (target == null) return -1;
     
-    return this.pos.distanceTo(e.pos);
+    return this.pos.distanceTo(target.pos);
   }
   
-  public float distance(GamePos pos)
+  //Returns the distance between this entity and a target position
+  public float distance(GamePos target)
   {
-    return this.pos.distanceTo(pos);
-  }
-  
-  public float distance(ScreenPos pos)
-  {
-    return this.pos.distanceTo(pos.toGamePos());
+    return this.pos.distanceTo(target);
   }
 
-  <T extends Entity> T closest(ArrayList<T> list){
-    T closest = null;
-    float closestDist = 200;
-
-    for (T s: list)
-    {
-      if (this.distance(s) < closestDist)
-      {
-        closest = s;
-        closestDist = this.distance(closest);
-      }
-    }
-
-    return closest;
-  }
-
+  //draws the entity
   public void drawEntity()
   {
     pushMatrix();
@@ -113,18 +92,5 @@ abstract class Entity
   {
     tintImage = true;
     tintColor = color(r, g, b);
-  }
-  
-  public <T extends Entity> boolean closeToEntity(ArrayList<T> entities)
-  {
-    boolean close = false;
-    for (Entity e : entities)
-    {
-      if (this.distance(e) != -1 && this.distance(e) < 50)
-      {
-        close = true;
-      }
-    }
-    return close;
   }
 }

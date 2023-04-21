@@ -1,30 +1,60 @@
 class Background{
-  final int lineSize = 10;
-  final int roadSize = 200;
+  //where the center of the road should be 
   final int center = 600;
-  final int edge1Size = roadSize+50;
-  final int edge2Size = edge1Size+50;
   
-  final color lineColor = color(200,200,200);
+  //width of the road divider
+  final int dividerSize = 10;
+  
+  //width of the road
+  final int roadSize = 200;
+
+  //width of the first outer edge of the road
+  final int edge1Size = 50;
+  
+  //width of the second outer edge from the road
+  final int edge2Size = 50;
+  
+  //color of the road divider
+  final color dividerColor = color(200,200,200);
+  
+  //color of the road
   final color roadColor = color(100,100,100);
+  
+  //color the first outer road edge
   final color edge1Color = color(80,80,80);
+  
+  //color of second outer road edge
   final color edge2Color = color(100,100,50);
   
-  final color sand1Color = color(150,150,0);
-  final color sand2Color = color(100,150,0);
+  final color grass1Color = color(150,150,0);
+  final color grass2Color = color(100,150,0);
   
-  int y = 0;
-  
-  private int bufferY = 0;
   private color[][] buffer;
   
+  private int y;
   
   Background(){
     buffer = new color[pixelWidth][pixelHeight];
   }
   
+  //moves the background up or down
+  void move(int y){
+    if (y > 0){
+      for (int i = 0; i < y; i++){
+        this.moveUp();
+      }
+    }
+    if (y < 0){
+      for (int i = 0; i < -y; i++){
+        this.moveDown();
+      }
+    }
+  }
+  
+  
+  //shifts the background upwards
   private void moveUp(){
-    this.bufferY += 1;  
+    this.y++;
     
     for (int x = 0; x < pixelWidth; x++)
     {
@@ -41,8 +71,9 @@ class Background{
     }
   }
     
+  //shifts the buffer downward
   private void moveDown(){
-    this.bufferY -= 1;  
+    this.y--;
     
     for (int x = 0; x < pixelWidth; x++)
     {
@@ -61,16 +92,6 @@ class Background{
   
   private void display()
   {
-    while (bufferY != y){
-      if (y > bufferY){
-        moveUp();  
-      }
-      else {
-        moveDown();  
-      }
-    }
-    
-    
     for (int x = 0; x < pixelWidth; x++)
     {
       for (int y = 0; y < pixelHeight; y++)
@@ -84,24 +105,30 @@ class Background{
     }
   }
   
+  
+  //Returns whether the current pixel is inside a noise blob
   private boolean inBlob(int x, int y, float scale, float value){
       return noise(x/scale, y/scale) < value;  
   }
   
+  //Returns whether the current pixel inside a vertical layer
+  //A layer can represent a road divider, road, curb, ect
   private boolean inLayer(int x, int size){
      return x > center-size/2 && x < center+size/2; 
   }
   
+  //returns the distance from the edge of a layer
   private float distFromEdge(int x, int size){
     return abs(size/2-abs(x-center));
   }
   
+  //returns the color at the pixel location
   private color getColor(int x, int y){
     if (
-      inLayer(x, lineSize) && 
+      inLayer(x, dividerSize) && 
       inBlob(x,y,20,.5)
     ){
-      return lineColor;
+      return dividerColor;
     }
     
     if (
@@ -112,22 +139,22 @@ class Background{
     }
     
     if (
-      inLayer(x, edge1Size) && 
-      inBlob(x,y,20, distFromEdge(x, edge1Size)*.02)
+      inLayer(x, roadSize+edge1Size) && 
+      inBlob(x,y,20, distFromEdge(x, roadSize+edge1Size)*.02)
     ){
       return edge1Color;
     }
     
     if (
-      inLayer(x, edge2Size) &&  
-      inBlob(x,y,20, distFromEdge(x, edge2Size)*.02)
+      inLayer(x, roadSize+edge1Size+edge2Size) &&  
+      inBlob(x,y,20, distFromEdge(x, roadSize+edge1Size+edge2Size)*.02)
     ){
       return edge2Color;
     }
     
     if (inBlob(x,y,50,.5)){
-      return sand1Color;
+      return grass1Color;
     }
-    return sand2Color;
+    return grass2Color;
   }
 }

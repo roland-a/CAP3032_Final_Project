@@ -2,28 +2,30 @@ import java.util.Iterator;
 
 abstract class Game
 {
-  Background background = new Background();
+  Background background;
   
   EntityList<Soldier> soldiers = new EntityList<>();
   EntityList<Zombie> zombies = new EntityList<>();
   EntityList<Bullet> bullets = new EntityList<>();
   Zombie mainZombie;
 
-  Time started;
-  Time lastUpdated;
+  TimeStamp started;
+  TimeStamp lastUpdated;
   
   int secsBetweenUpdates;
   
   
-  Game()
+  Game(Background background)
   {
     this.started = now();
     this.lastUpdated = now();
     
+    this.background = background;
   }
 
-  abstract void doUpdate();
+  abstract void doPeriodicUpdate();
   
+  //runs an update every loop
   void update()
   {    
     background.display();

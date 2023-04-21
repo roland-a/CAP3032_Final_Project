@@ -3,19 +3,23 @@ class EntityList<T extends Entity> implements Iterable<T>{
    
   EntityList(){}
   
-  
+  //Adds an entity to the list
   void add(T entity){
     this.inner.add(entity);
   }
   
+  //Allows the entity list to be iterated
+  @Override
   Iterator<T> iterator(){
     return this.inner.iterator();
   }
   
+  //returns the size of the entity list
   int size(){
     return this.inner.size();  
   }
   
+  //gets the closest entity from a position
   T closest(GamePos p)
   {
     T closest = null;
@@ -35,6 +39,8 @@ class EntityList<T extends Entity> implements Iterable<T>{
     return closest;
   }
   
+  //Returns a random entity in the list
+  //Returns null if it is empty
   T getRandom()
   {
     if (this.inner.isEmpty()) return null;
@@ -42,6 +48,8 @@ class EntityList<T extends Entity> implements Iterable<T>{
     return this.inner.get((int)random(this.inner.size()));
   }
   
+  //Updates every entity in the list
+  //Also removes entities that are not alive
   void update(Game g)
   {
     Iterator<T> iter = this.inner.iterator();

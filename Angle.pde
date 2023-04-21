@@ -1,5 +1,6 @@
 class Angle
 {
+  //The angle in degrees
   final float angle;
   
   Angle(float angle)
@@ -12,17 +13,20 @@ class Angle
     this(0); 
   }
   
+  //gets the cosine of the angle
   float cos()
   {
       return (float)Math.cos(this.angle);
   }
   
+  //gets the sine of the angle
   float sin()
   {
     return (float)Math.sin(this.angle); 
   }
   
-  Angle flip(){
-    return new Angle(this.angle+180);  
+  //rotates the angle by n degrees
+  Angle rotate(int delta){
+    return new Angle(this.angle+delta);  
   }
 }

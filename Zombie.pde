@@ -1,31 +1,31 @@
-Zombie randomZombie(){
+Zombie randomZombie() {
   return new Zombie(
-    randomScreenPos().toGamePos(),
+    randomScreenPos(),
     new Angle()
-  );
+    );
 }
 
 class Zombie extends ShootingEntity
 {
   int damage;
   boolean main;
-  
-  Time lastDamageTime = now();
+
+  TimeStamp lastDamageTime = now();
 
   Zombie(GamePos pos, Angle angle)
   {
     super(.5, "zombie.png");
-    
-    
+
+
     this.radius = 10;
     this.speed = 4;
     this.maxBullets = 10;
     this.reloadTime = 4;
     this.shootTime = .5;
-    
+
     this.pos = pos;
     this.angle = angle;
-        
+
     this.bulletCount = this.maxBullets;
 
     this.health = 30;
@@ -33,9 +33,13 @@ class Zombie extends ShootingEntity
 
     this.main = false;
   }
-  
+
+
+  //Returns true if the bullet can interact with the entity
+  //For the main zombie, the bullet can hit both zombies and soldiers
+  //Bullets only apply 10 damage to zombies, but instantly kills and zombifies soldiers
   boolean bulletInteract(Entity t) {
-    if (t instanceof Soldier){
+    if (t instanceof Soldier) {
       ((Soldier)t).damage(10000);
     }
     if (t instanceof Zombie) {
@@ -44,7 +48,8 @@ class Zombie extends ShootingEntity
     return true;
   }
 
-  public void update(Game g)
+  @Override
+    public void update(Game g)
   {
     drawEntity();
 
@@ -57,72 +62,83 @@ class Zombie extends ShootingEntity
     }
   }
 
-  public void mainUpdate(Game g)
+  //update the zombie if it is a main zombie
+  private void mainUpdate(Game g)
   {
-    ScreenPos mousePos = getMousePos();
-
-    if (this.distance(mousePos)>5)
+    //move to mouse position
+    //wont move if it is too close to mouse posoition
+    if (this.distance(getMousePos())>5)
     {
-      this.rotateTo(mousePos);
+      this.rotateTo(getMousePos());
       this.move(this.angle, this.speed, g);
     }
 
+    //shoot if left mouse is clicked
     if (mousePressed && mouseButton == LEFT)
     {
-      println(this.bulletCount);
-      this.shoot(g);
+      this.tryShoot(g);
     }
 
+    //try to attack the closest soldier
     Soldier closest = g.soldiers.closest(this.pos);
     if (closest != null)
     {
-      this.attack(closest);
+      this.tryAttack(closest);
     }
   }
 
 
   public void hordeUpdate(Game g)
   {
-    if (mousePressed && mouseButton == RIGHT && this.distance(getMousePos()) < 500)
+    Soldier closest = g.soldiers.closest(this.pos);
+
+    //moves to mouse position if the right mouse button is clicked
+    if (mousePressed && mouseButton == RIGHT && this.distance(getMousePos()) < 200)
     {
       this.rotateTo(getMousePos());
       this.move(this.angle, this.speed, g);
     } else
     {
-      Soldier closest = g.soldiers.closest(this.pos);
       if (closest == null) return;
-
       this.rotateTo(closest);
+      
       this.move(this.angle, this.speed, g);
-
-      this.attack(closest);
     }
+    
+    if (closest == null) return;
+    this.tryAttack(closest);
   }
 
-  public void attack(Soldier closest)
+  //Attempts to attack a given soldier
+  //Does nothing if too far, or has already recently attacked
+  private void tryAttack(Soldier closest)
   {
     if (!lastDamageTime.hasSecsPassed(.5)) return;
-    
-    float dist = this.distance(closest);
+
+    float dist = this.distanceTo(closest);
 
     if (dist > this.radius+closest.radius+5) return;
-    
+
     closest.damage(this.damage);
-    
+
     lastDamageTime = now();
   }
 
+  //Sets this zombie as the new main zombie
   public void setMain()
   {
     tintEntity(255, 50, 50);
     this.main = true;
   }
 
-  void move(Angle angle, float speed, Game g)
+  //moves the current zombie
+  //will also push other zombies
+  private void move(Angle angle, float speed, Game g)
   {
+    //The projected new position
     GamePos proj = this.pos.move(angle, speed);
 
-    if (proj.isOutOfBounds()){
+    if (proj.isOutOfBounds()) {
       return;
     }
 
@@ -134,6 +150,7 @@ class Zombie extends ShootingEntity
       float d1 = this.pos.distanceTo(z.pos);
       float d2 = proj.distanceTo(z.pos);
 
+      //it moves the other zombie if its both getting closer to the other zombie, and will touch the other zombie
       if (d1>d2 && d2 < this.radius+z.radius) {
         toMove.add(z);
       }
@@ -144,6 +161,7 @@ class Zombie extends ShootingEntity
       float d1 = this.pos.distanceTo(s.pos);
       float d2 = proj.distanceTo(s.pos);
 
+      //zombies cant push soldiers
       if (d1>d2 && d2 < this.radius+s.radius)
       {
         return;
@@ -152,6 +170,7 @@ class Zombie extends ShootingEntity
 
     for (Zombie z : toMove)
     {
+      //pushes the other zombie
       z.move(angle, speed/(toMove.size()+1), g);
     }
     this.pos = this.pos.move(angle, speed/(toMove.size()+1));

@@ -1,15 +1,21 @@
 abstract class ShootingEntity extends Entity{
-  //Maximum magazine size
+  //maximum magazine size
   int maxBullets;
   
+  //Time between every gunshot
   float shootTime;
+  
+  //Time to reload the magazine
   float reloadTime;
 
+  //How much bullets an entity has left
   int bulletCount;
-  int lastShotStart;
   
+  //The last time this entity has shot
+  TimeStamp lastShotTime;
+  
+  //The amount of health this entity has left
   int health;
-  Time lastShotTime;
   
   ShootingEntity(float scale, String imageFileName){
     super(scale, imageFileName);  
@@ -17,9 +23,12 @@ abstract class ShootingEntity extends Entity{
     this.lastShotTime = now();
   }
   
+  //Returns true if the bullet can interact with an entity
   abstract boolean bulletInteract(Entity e);
   
-  void shoot(Game g)
+  //The entity will attempt to shoot
+  //Nothing will happen if it has shot recently, or if it is currently reloading
+  void tryShoot(Game g)
   {
     if (this.bulletCount <= 0){
       if (!lastShotTime.hasSecsPassed(reloadTime)) return;
@@ -31,11 +40,13 @@ abstract class ShootingEntity extends Entity{
   
     //Make a bullet      
     Bullet b = new Bullet(this.pos, this.angle){
+      @Override
       boolean interact(Entity t){
         return bulletInteract(t);
       }
     };
     
+    //moves the bullet so that it wont hit the entity shooting it
     b.pos = b.pos.move(this.angle, b.radius+this.radius+1);
     
     g.bullets.add(b);
@@ -44,11 +55,14 @@ abstract class ShootingEntity extends Entity{
     this.lastShotTime = now();
   }
   
+  //Applies damage to the entity
   public void damage(int damage)
   {
     this.health -= damage;
   }
   
+  //Is alive if the health is above 0
+  @Override
   public boolean isAlive()
   {
     return this.health > 0;

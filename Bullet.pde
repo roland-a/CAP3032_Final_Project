@@ -1,6 +1,8 @@
 abstract class Bullet extends Entity
 {
-  boolean isHit = false;
+  
+  //whether the bullet has hit an entity it can interact with
+  boolean hasHit = false;
   
   Bullet(GamePos pos, Angle rot)
   {
@@ -13,40 +15,41 @@ abstract class Bullet extends Entity
     this.angle = rot;
   }
   
+  @Override
   public void update(Game g)
   {
     this.drawEntity();
     
     this.pos = this.pos.move(this.angle, this.speed);
     
-    this.damage(g);
-  }
-  
-  public void damage(Game g)
-  {
     for (Zombie z: g.zombies)
     {
-      if (this.distance(z) < this.radius+z.radius)
+      if (this.distanceTo(z) < this.radius+z.radius)
       {
-          this.isHit = interact(z);
-          if (this.isHit) return;
+          this.hasHit = interact(z);
+          if (this.hasHit) return;
       }
     }
     
     for (Soldier s: g.soldiers)
     {
-      if (this.distance(s) < this.radius+s.radius)
+      if (this.distanceTo(s) < this.radius+s.radius)
       {
-          this.isHit = interact(s);
-          if (this.isHit) return;
+          this.hasHit = interact(s);
+          if (this.hasHit) return;
       }
     }
   }
   
+  //returns whether the bullet can interact with an entity
+  //interacts with it if returns true
   abstract boolean interact(Entity e);
   
+  
+  //The bullet is alive if it has not hit an entity, and it is not out of bounds
+  @Override
   public boolean isAlive()
   {
-    return !this.isHit && !this.pos.isOutOfBounds();
+    return !this.hasHit && !this.pos.isOutOfBounds();
   }
 }

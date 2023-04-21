@@ -1,3 +1,16 @@
+GamePos randomScreenPos()
+{
+  return new GamePos(
+    random(width-20)+10,
+    random(height-20)+10
+  );
+}
+
+GamePos getMousePos()
+{
+  return new GamePos(mouseX, mouseY);
+}
+
 
 class GamePos
 {
@@ -10,19 +23,22 @@ class GamePos
     this.y = y;
   }
   
-  GamePos move(Angle a, float speed)
+  //offsets the position by angle and distance
+  GamePos move(Angle a, float distance)
   {
     return new GamePos(
-      this.x + a.cos()*speed,
-      this.y + a.sin()*speed
+      this.x + a.cos()*distance,
+      this.y + a.sin()*distance
     );
   }
   
-  float distanceTo(GamePos other)
+  //returns the distance between this position and the target psoition
+  float distanceTo(GamePos target)
   {
-    return dist(this.x, this.y, other.x, other.y);
+    return dist(this.x, this.y, target.x, target.y);
   }
   
+  //Returns the angle between this position and the target position
   Angle pointTo(GamePos target)
   {
     return new Angle(
@@ -30,11 +46,8 @@ class GamePos
     );
   }
   
+  //Returns true if the position is out of bounds
   boolean isOutOfBounds(){
     return this.x > width || this.x < 0 || this.y > height || this.y < 0;
-  }
-  
-  ScreenPos toScreenPos(){
-    return new ScreenPos((int)this.x, (int)this.y);  
   }
 }
