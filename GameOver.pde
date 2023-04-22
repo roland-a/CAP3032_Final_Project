@@ -8,6 +8,7 @@ class GameOver
   
   Button retryButton, quitButton;
   
+  //Constructor of the Menu that initializes the location of the menu screen and the locations of the buttons
   public GameOver(int newX, int newY)
   {
     gameoverImage = loadImage("gameover.png");
@@ -19,6 +20,7 @@ class GameOver
     quitButton = new Button("QUIT", originX + width/2 + 300, originY + height - 200, color(150, 0, 0));
   }
   
+  //Displays a backing rectangle and calls the buttons' display methods
   public void display()
   {
     //Draw background rectangle
@@ -39,6 +41,7 @@ class GameOver
     quitButton.display();
   }
   
+  //Scrolls the screen down
   public void moveDown(int moveAmount)
   {
     originY += moveAmount;
@@ -46,6 +49,7 @@ class GameOver
     updateButtons();
   }
   
+  //Scrolls the screen up
   public void moveUp(int moveAmount)
   {
     originY -= moveAmount;
@@ -53,6 +57,7 @@ class GameOver
     updateButtons();
   }
   
+  //Sets the origin of the screen  
   public void setOrigin(int newX, int newY)
   {
     originX = newX;
@@ -61,6 +66,7 @@ class GameOver
     updateButtons();
   }
   
+  //Updates the locations of the buttons
   public void updateButtons()
   {
     retryButton.updateLoc(width/2 - 300, originY + height-200);

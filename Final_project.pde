@@ -16,6 +16,7 @@ int menuState = 0;
 int currentY = 0;
 int targetY = 0;
 
+//Sets up the global variables of the game such as the background, menus, and background music
 void setup()
 {
   size(1440, 810);
@@ -32,6 +33,8 @@ void setup()
   music.loop();
 }
 
+//Calls the display methods of the game objects such as the menus
+//Also updates the scrolling effect of the screen
 void draw()
 {
   background.display();  
@@ -70,6 +73,8 @@ void draw()
   }
 }
 
+//Update the game when the mouse is clicked
+//If the player is not in a game check for intersections with the menu buttons
 void mouseClicked()
 {
   if (currGame == null)
@@ -117,6 +122,7 @@ void mouseClicked()
   }
 }
 
+//Scrolls the menu screens and the background up to create the rolling effect
 void moveScreenUp()
 {
   int moveAmount = 30;
@@ -127,6 +133,7 @@ void moveScreenUp()
   background.move(-2);
 }
 
+//Scrolls the menu screens and the background down to create the rolling effect
 void moveScreenDown()
 {
   int moveAmount = 30;

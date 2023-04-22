@@ -6,6 +6,7 @@ class LevelMenu
   
   Button level1, level2, backButton;
   
+  //Constructor of the LevelMenu that initializes the location of the gameover screen and the locations of the buttons
   public LevelMenu(int newX, int newY)
   {
     originX = newX;
@@ -16,6 +17,7 @@ class LevelMenu
     backButton = new Button("BACK", originX + width - 300, originY + height-200, color(150, 0, 0));
   }
   
+  //Displays a backing rectangle and calls the buttons' display methods
   public void display()
   {
     noStroke();
@@ -28,6 +30,7 @@ class LevelMenu
     backButton.display();
   }
   
+  //Scrolls the screen down
   public void moveDown(int moveAmount)
   {
     originY += moveAmount;
@@ -35,6 +38,7 @@ class LevelMenu
     updateButtons();
   }
   
+  //Scrolls the screen up
   public void moveUp(int moveAmount)
   {
     originY -= moveAmount;
@@ -42,6 +46,7 @@ class LevelMenu
     updateButtons();
   }
   
+  //Sets the origin of the screen
   public void setOrigin(int newX, int newY)
   {
     originX = newX;
@@ -50,6 +55,7 @@ class LevelMenu
     updateButtons();
   }
   
+  //Updates the locations of the buttons
   public void updateButtons()
   {
     level1.updateLoc(originX + width/2 - 300, originY + height/2 - 100);

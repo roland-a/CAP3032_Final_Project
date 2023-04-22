@@ -6,6 +6,7 @@ class Menu
   
   Button startButton, quitButton;
   
+  //Constructor of the Menu that initializes the location of the menu screen and the locations of the buttons
   public Menu(int newX, int newY)
   {
     titleImage = loadImage("title.png");
@@ -17,6 +18,7 @@ class Menu
     quitButton = new Button("QUIT", originX + width/2 + 300, originY + height - 200, color(150, 0, 0));
   }
   
+  //Displays a backing rectangle and calls the buttons' display methods
   public void display()
   {
     //Draw background rectangle
@@ -34,6 +36,7 @@ class Menu
     quitButton.display();
   }
   
+  //Scrolls the screen down
   public void moveDown(int moveAmount)
   {
     originY += moveAmount;
@@ -41,6 +44,7 @@ class Menu
     updateButtons();
   }
   
+  //Scrolls the screen up
   public void moveUp(int moveAmount)
   {
     originY -= moveAmount;
@@ -48,6 +52,7 @@ class Menu
     updateButtons();
   }
   
+  //Sets the origin of the screen
   public void setOrigin(int newX, int newY)
   {
     originX = newX;
@@ -56,6 +61,7 @@ class Menu
     updateButtons();
   }
   
+  //Updates the locations of the buttons
   public void updateButtons()
   {
     startButton.updateLoc(width/2 - 300, originY + height-200);
