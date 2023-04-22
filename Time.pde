@@ -1,4 +1,4 @@
-
+//Returns the current time
 TimeStamp now(){
   return new TimeStamp(millis());
 }
