@@ -144,6 +144,11 @@ void moveScreenDown()
   background.move(2);
 }
 
+
+//Creates the first level
+//You start off with 10 zombies and 10 soldiers
+//The difficulties increases as time increases
+//The score is how long you survived
 Game makeLevel1()
 {
   return new Game(background){
@@ -184,6 +189,11 @@ Game makeLevel1()
   };
 }
 
+
+//Creates the second level
+//You start off with 2 zombies and 1 soldiers
+//The difficulties increases as the max number of zombies increase
+//The score is the max number of zombies
 Game makeLevel2()
 {
   return new Game(background){
