@@ -1,3 +1,4 @@
+//Generates a zombie at a random position
 Zombie randomZombie() {
   return new Zombie(
     randomScreenPos(),
