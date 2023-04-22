@@ -8,8 +8,10 @@ LevelMenu levelMenu;
 GameOver gameoverMenu;
 
 Game currGame;
+int currLevel;
 
 SoundFile music;
+SoundFile gunShot;
 
 int menuState = 0;
 
@@ -29,6 +31,7 @@ void setup()
   levelMenu = new LevelMenu(0, -height);
   gameoverMenu = new GameOver(0, height);
   
+  gunShot = new SoundFile(this, "gunshot.mp3");
   music = new SoundFile(this, "music.mp3");
   music.loop();
 }
@@ -102,16 +105,23 @@ void mouseClicked()
     if (menuState == 1 && levelMenu.level1.intersects(mouseX, mouseY))
     {
       currGame = makeLevel1();
+      currLevel = 1;
     }
     if (menuState == 1 && levelMenu.level2.intersects(mouseX, mouseY))
     {
       currGame = makeLevel2();
+      currLevel = 2;
     }
     
     //Game Over Buttons
     if (menuState == 2 && gameoverMenu.retryButton.intersects(mouseX, mouseY))
     {
-      currGame = makeLevel1();
+      if (currLevel==1){
+        currGame = makeLevel1();
+      }
+      if (currLevel==2){
+        currGame = makeLevel2();
+      }
     }  
     if (menuState == 2 && gameoverMenu.quitButton.intersects(mouseX, mouseY))
     {
@@ -152,7 +162,7 @@ void moveScreenDown()
 Game makeLevel1()
 {
   return new Game(background){
-    //constructor
+    //The initializer of level 1
     {
       this.secsBetweenUpdates = 2;
 
@@ -199,8 +209,9 @@ Game makeLevel2()
   return new Game(background){
     int maxZombies = 2;
 
+    //The initializer of level 2
     {
-      this.secsBetweenUpdates = 1;
+      this.secsBetweenUpdates = 2;
 
       while (this.zombies.size()<2)
       {
@@ -213,15 +224,24 @@ Game makeLevel2()
         );
       }
     }
-
+    
+    //Increments the max zombies in the main update rather than the periodic update
+    //This so that the score will instantly change
     @Override
-    void doPeriodicUpdate()
-    {
+    void update(){
+      super.update();
+      
       if (this.maxZombies<this.zombies.size())
       {
         this.maxZombies = this.zombies.size();
       }
+    }
 
+    //Adds more soldiers depeding on time
+    //Increases the soliders health depending on time
+    @Override
+    void doPeriodicUpdate()
+    {
       int soldierCount = this.maxZombies/2;
       int soldierHealth = 5 + this.zombies.size()*2;
 
